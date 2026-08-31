@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA CLOTHES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<!-- ===== BARRA SUPERIOR ===== -->
+<div class="topbar">
+  <div class="topbar__inner">
+
+    <button class="icon-btn icon-btn--search" type="button" aria-label="Buscar productos">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <span class="icon-btn__label">Buscar</span>
+    </button>
+
+    <a class="logo" href="#" aria-label="AURA CLOTHES, ir al inicio">
+      <span class="logo__mark">AC</span>
+      <span class="logo__word">AURA CLOTHES</span>
+    </a>
+
+    <div class="topbar__actions">
+      <button class="icon-btn" type="button" aria-label="Mi cuenta">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>
+        <span class="icon-btn__label">Cuenta</span>
+      </button>
+      <button class="icon-btn" type="button" aria-label="Ver carrito, 3 productos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.5 10.5a2 2 0 0 1-2 1.5H7.5a2 2 0 0 1-2-1.5L4 6z"></path><path d="M8 6V5a4 4 0 0 1 8 0v1"></path></svg>
+        <span class="icon-btn__label">Carrito</span>
+        <span class="icon-btn__badge">3</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== NAVEGACIÓN PRINCIPAL ===== -->
+<nav class="mainnav" aria-label="Navegación principal">
+  <ul class="mainnav__list">
+    <li><a class="mainnav__link is-active" href="#">Inicio</a></li>
+    <li><a class="mainnav__link" href="#">Nuevo</a></li>
+    <li><a class="mainnav__link" href="#">Productos</a></li>
+    <li><a class="mainnav__link" href="#">Ofertas</a></li>
+    <li><a class="mainnav__link" href="#">Contacto</a></li>
+    <li><a class="mainnav__link" href="#">Quiénes somos</a></li>
+    <li><a class="mainnav__link" href="#">Blog</a></li>
+  </ul>
+</nav>
+
+<main id="contenido">
+
+  <!-- ===== PRESENTACIÓN DE COLECCIÓN ===== -->
+  <section class="feature">
+    <div class="feature__media" role="img" aria-label="Sala de estar con muebles y objetos AURA CLOTHES">
+      <span class="placeholder-tag">Colección Otoño</span>
+    </div>
+    <div class="feature__text">
+      <p class="feature__kicker">Nueva colección</p>
+      <h1 class="feature__title">Prendas con textura, hechas para durar</h1>
+      <p class="feature__body">Prendas de lana, algodón y pana, pensadas para días que empiezan fríos y terminan templados. Confección en talleres pequeños, sin apuro y sin fibras de más.</p>
+      <a class="link-arrow" href="#">Ver la colección completa</a>
+    </div>
+  </section>
+
+  <!-- ===== OFERTAS ===== -->
+  <section class="section" aria-labelledby="tit-ofertas">
+    <div class="section__head">
+      <h2 class="section__title" id="tit-ofertas">Ofertas de la semana</h2>
+      <a class="section__link" href="#">Ver todas las ofertas</a>
+    </div>
+
+    <ul class="product-grid">
+      <li class="product-card">
+        <div class="product-card__media product-card__media--sand">
+          <span class="placeholder-tag">Remeras</span>
+          <span class="tag-discount">-20%</span>
+        </div>
+        <p class="product-card__name">Remera Oversize AURA - Overflow</p>
+        <p class="product-card__price"><span class="price-old">$28.900</span> $23.100</p>
+      </li>
+
+      <li class="product-card">
+        <div class="product-card__media product-card__media--brand">
+          <span class="placeholder-tag">Pantalones</span>
+          <span class="tag-discount">-15%</span>
+        </div>
+        <p class="product-card__name">Pantalón Baggy AURA - Class Division</p>
+        <p class="product-card__price"><span class="price-old">$42.000</span> $35.700</p>
+      </li>
+
+      <li class="product-card">
+        <div class="product-card__media product-card__media--ink">
+          <span class="placeholder-tag">HeadWear</span>
+          <span class="tag-discount">-30%</span>
+        </div>
+        <p class="product-card__name">Gorro de lana Y2K - Century War</p>
+        <p class="product-card__price"><span class="price-old">$61.500</span> $43.050</p>
+      </li>
+
+      <li class="product-card">
+        <div class="product-card__media product-card__media--accent">
+          <span class="placeholder-tag">Remeras</span>
+          <span class="tag-discount">-10%</span>
+        </div>
+        <p class="product-card__name">Remera Oversize TripleZ - Colorful</p>
+        <p class="product-card__price"><span class="price-old">$19.800</span> $17.820</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ===== CATEGORÍAS PRINCIPALES ===== -->
+  <section class="section section--alt" aria-labelledby="tit-categorias">
+    <div class="section__head">
+      <h2 class="section__title" id="tit-categorias">Categorías principales</h2>
+    </div>
+
+    <ul class="category-grid">
+      <li class="category-card">
+        <div class="category-card__media category-card__media--1"><span class="placeholder-tag">Remeras</span></div>
+        <p class="category-card__name">Remeras</p>
+      </li>
+      <li class="category-card">
+        <div class="category-card__media category-card__media--2"><span class="placeholder-tag">Pantalones</span></div>
+        <p class="category-card__name">Pantalones</p>
+      </li>
+      <li class="category-card">
+        <div class="category-card__media category-card__media--3"><span class="placeholder-tag">HeadWear</span></div>
+        <p class="category-card__name">HeadWear</p>
+      </li>
+      <li class="category-card">
+        <div class="category-card__media category-card__media--4"><span class="placeholder-tag">Accesorios</span></div>
+        <p class="category-card__name">Accesorios</p>
+      </li>
+      <li class="category-card">
+        <div class="category-card__media category-card__media--5"><span class="placeholder-tag">Buzos</span></div>
+        <p class="category-card__name">Buzos</p>
+      </li>
+      <li class="category-card">
+        <div class="category-card__media category-card__media--6"><span class="placeholder-tag">Mochilas</span></div>
+        <p class="category-card__name">Mochilas</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ===== ENVÍOS / REDES / HORARIO ===== -->
+  <section class="info-band">
+    <div class="info-band__col">
+      <h2 class="info-band__title">Envíos</h2>
+      <p class="info-band__body">Entregamos en todo el país en 3 a 7 días hábiles.
+      Envío gratis en compras superiores a $50.000. Retiro sin cargo en
+      nuestro local de Posadas.</p>
+    </div>
+
+    <div class="info-band__col">
+      <h2 class="info-band__title">Seguinos</h2>
+      <ul class="social-list">
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Pinterest</a></li>
+        <li><a href="#">TikTok</a></li>
+      </ul>
+    </div>
+
+    <div class="info-band__col">
+      <h2 class="info-band__title">Horario de atención</h2>
+      <p class="info-band__body">Lunes a viernes, de 9 a 18 hs.<br>
+      Sábados, de 9 a 13 hs.<br>
+      Domingos y feriados, cerrado.</p>
+    </div>
+  </section>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="newsletter">
+    <div class="newsletter__inner">
+      <h2 class="newsletter__title">Novedades una vez al mes, nada más</h2>
+      <p class="newsletter__body">Nuevos productos, reposiciones y descuentos
+      exclusivos para quienes se suscriben.</p>
+      <form class="newsletter__form" action="#">
+        <label class="visually-hidden" for="newsletter-email">Correo electrónico</label>
+        <input class="newsletter__input" type="email" id="newsletter-email" name="email" placeholder="tu@correo.com" required>
+        <button class="newsletter__button" type="submit">Suscribirme</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer__grid">
+
+    <div class="footer__col">
+      <p class="footer__brand">AURA CLOTHES</p>
+      <p class="footer__body">Prendas de lana, algodón y lino de uso diario, hechas en talleres pequeños.</p>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__heading">Navegación</h3>
+      <ul class="footer__list">
+        <li><a href="#">Inicio</a></li>
+        <li><a href="#">Nuevo</a></li>
+        <li><a href="#">Productos</a></li>
+        <li><a href="#">Ofertas</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__heading">Ayuda</h3>
+      <ul class="footer__list">
+        <li><a href="#">Envíos y entregas</a></li>
+        <li><a href="#">Cambios y devoluciones</a></li>
+        <li><a href="#">Contacto</a></li>
+        <li><a href="#">Quiénes somos</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__heading">Contacto</h3>
+      <p class="footer__body">Lun a vie 9–18 hs · Sáb 9–13 hs</p>
+      <ul class="footer__list footer__list--inline">
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">Pinterest</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="footer__bottom">
+    <p>© 2026 AURA CLOTHES. Todos los derechos reservados.</p>
+    <ul class="footer__legal">
+      <li><a href="#">Términos</a></li>
+      <li><a href="#">Privacidad</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
