@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="{{ asset('css/inicio.css') }}">
 </head>
 <body>
 
@@ -45,13 +45,12 @@
 <!-- ===== NAVEGACIÓN PRINCIPAL ===== -->
 <nav class="mainnav" aria-label="Navegación principal">
   <ul class="mainnav__list">
-    <li><a class="mainnav__link is-active" href="#">Inicio</a></li>
-    <li><a class="mainnav__link" href="#">Nuevo</a></li>
-    <li><a class="mainnav__link" href="#">Productos</a></li>
-    <li><a class="mainnav__link" href="#">Ofertas</a></li>
-    <li><a class="mainnav__link" href="#">Contacto</a></li>
-    <li><a class="mainnav__link" href="#">Quiénes somos</a></li>
-    <li><a class="mainnav__link" href="#">Blog</a></li>
+    <li><a class="mainnav__link is-active" href="{{ route('inicio') }}">Inicio</a></li>
+    <li><a class="mainnav__link" href="{{ route('nuevo') }}">Nuevo</a></li>
+    <li><a class="mainnav__link" href="{{ route('productos') }}">Productos</a></li>
+    <li><a class="mainnav__link" href="{{ route('ofertas') }}">Ofertas</a></li>
+    <li><a class="mainnav__link" href="{{ route('contacto') }}">Contacto</a></li>
+    <li><a class="mainnav__link" href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
   </ul>
 </nav>
 
