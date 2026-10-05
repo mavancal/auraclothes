@@ -1,0 +1,35 @@
+{
+  "valores": [
+    {
+      "numero": "01",
+      "titulo": "Sin fibras de más",
+      "descripcion": "Trabajamos exclusivamente con lana, algodón y lino. Sin mezclas sintéticas, sin atajos."
+    },
+    {
+      "numero": "02",
+      "titulo": "Talleres pequeños",
+      "descripcion": "Toda la producción pasa por talleres locales en Posadas y Corrientes. Conocemos a cada persona que cose."
+    },
+    {
+      "numero": "03",
+      "titulo": "Volúmenes controlados",
+      "descripcion": "No fabricamos de más. Cuando se acaba, se acaba. Eso mantiene la calidad y evita el desperdicio."
+    },
+    {
+      "numero": "04",
+      "titulo": "Sin apuro",
+      "descripcion": "Las colecciones salen cuando están listas. Una vez al año, dos si el año fue bueno."
+    }
+  ],
+  "estadisticas": [
+    { "numero": "7", "etiqueta": "años en el mercado" },
+    { "numero": "4", "etiqueta": "talleres asociados" },
+    { "numero": "+12.000", "etiqueta": "prendas entregadas" }
+  ],
+  "equipo": [
+    { "nombre": "Valentina Ruiz", "rol": "Fundadora & Dirección creativa" },
+    { "nombre": "Martín Ojeda", "rol": "Diseño de producto" },
+    { "nombre": "Camila Torres", "rol": "Producción & talleres" },
+    { "nombre": "Lucas Ferreyra", "rol": "Logística & e-commerce" }
+  ]
+}

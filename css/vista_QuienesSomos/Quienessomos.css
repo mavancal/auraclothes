@@ -1,0 +1,164 @@
+    :root {
+  --bg: #F4F4F5;
+  --bg-alt: #E4E4E7;
+  --ink: #18181B;
+  --ink-soft: #52525B;
+  --brand: #27272A;
+  --accent: #5C6B73;
+  --maxw: 1180px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+h1, h2, h3 {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+/* NAVEGACIÓN */
+.nav {
+  background: var(--brand);
+  padding: 1rem 1.5rem;
+  text-align: center;
+}
+
+.nav a {
+  color: #EFEBE1;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-size: 0.95rem;
+}
+
+.nav a.active {
+  color: #fff;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.2rem;
+}
+
+/* HERO */
+.hero {
+  background: var(--brand);
+  color: #fff;
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+
+.hero .kicker {
+  color: var(--accent);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  max-width: 600px;
+  margin: 0 auto 1rem;
+}
+
+.hero p {
+  color: #D8DED9;
+  max-width: 550px;
+  margin: 0 auto;
+}
+
+/* LAYOUT GENERAL */
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+/* CÓMO TRABAJAMOS */
+.val-num {
+  color: var(--accent);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.val-title {
+  font-size: 1.2rem;
+  margin: 0.3rem 0;
+}
+
+.val-text {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+/* BANDA DE ESTADÍSTICAS */
+.stats {
+  background: var(--bg-alt);
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.grid-3 {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.stat-num {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--brand);
+}
+
+.stat-desc {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+/* TARJETAS EQUIPO */
+.card-img {
+  aspect-ratio: 3/4;
+  background: #3F3F46;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+}
+
+.card-img svg {
+  width: 48px;
+  height: 48px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.team-name {
+  font-weight: bold;
+  margin-top: 0.8rem;
+}
+
+.team-role {
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
