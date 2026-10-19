@@ -13,6 +13,17 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    public function contacto() { 
+        return $this->belongsTo(Contacto::class); 
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Rol::class, 'rol_user')->withPivot('fecha_asig');
+    }
+    public function pedidos() { 
+        return $this->hasMany(Pedido::class); 
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +33,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'contacto_id',
+        'activo'
     ];
 
     /**
