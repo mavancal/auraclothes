@@ -13,7 +13,7 @@ class Contacto extends Model
     public function user() { return $this->hasOne(User::class); }
     public function categorias()
     {
-        return $this->belongsToMany(CategoriaUsuario::class, 'categoria_us_contacto')
+        return $this->belongsToMany(CategoriaUsuario::class, 'categoria_us_contacto', 'contacto_id', 'categoria_us_id')
                     ->withPivot('fecha_asig');
     }
 }

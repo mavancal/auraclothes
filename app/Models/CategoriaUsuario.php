@@ -10,7 +10,7 @@ class CategoriaUsuario extends Model
     protected $guarded = [];
     public function contactos()
     {
-        return $this->belongsToMany(Contacto::class, 'categoria_us_contacto')
+        return $this->belongsToMany(Contacto::class, 'categoria_us_contacto', 'categoria_us_id', 'contacto_id')
                     ->withPivot('fecha_asig');
     }
 }
