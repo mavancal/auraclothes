@@ -12,44 +12,50 @@
     <link rel="stylesheet" href="{{ asset('css/contacto.css') }}">
   </head>
   <body>
-    <!-- figma:body-start -->
-    <header>
-      <div class="topbar">
-        <div class="topbar__inner">
-          <button class="icon-btn" type="button" aria-label="Buscar productos">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <span class="icon-btn__label">Buscar</span>
+
+        <header class="topbar">
+      <div class="topbar__inner">
+        <button class="icon-btn icon-btn--search" type="button" aria-label="Buscar productos">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span class="icon-btn__label">Buscar</span>
+        </button>
+
+
+        <a class="logo" href="index.html" aria-label="AURA CLOTHES, ir al inicio">
+          <span class="logo__mark">AC</span>
+          <span class="logo__word">AURA CLOTHES</span>
+        </a>
+
+        <div class="topbar__actions">
+
+
+          <button class="icon-btn" type="button" aria-label="Mi cuenta">
+            <a href="{{ route('cuenta') }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>
+                <span class="icon-btn__label">Cuenta</span>
+            </a>
           </button>
 
-          <a class="logo" href="../../index.html#inicio" aria-label="AURA CLOTHES, ir al inicio">
-            <span class="logo__mark">AC</span>
-            <span class="logo__word">AURA CLOTHES</span>
-          </a>
 
-          <div class="topbar__actions">
-            <button class="icon-btn" type="button" aria-label="Mi cuenta">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>
-              <span class="icon-btn__label">Cuenta</span>
-            </button>
-            <button class="icon-btn" type="button" aria-label="Ver carrito, 3 productos">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.5 10.5a2 2 0 0 1-2 1.5H7.5a2 2 0 0 1-2-1.5L4 6z"></path><path d="M8 6V5a4 4 0 0 1 8 0v1"></path></svg>
-              <span class="icon-btn__label">Carrito</span>
-              <span class="icon-btn__badge">3</span>
-            </button>
-          </div>
+          <button class="icon-btn" type="button" aria-label="Ver carrito, 3 productos">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.5 10.5a2 2 0 0 1-2 1.5H7.5a2 2 0 0 1-2-1.5L4 6z"></path><path d="M8 6V5a4 4 0 0 1 8 0v1"></path></svg>
+            <span class="icon-btn__label">Carrito</span>
+            <span class="icon-btn__badge">3</span>
+          </button>
         </div>
       </div>
+    
 
-        <nav class="mainnav" aria-label="Navegación principal">
+      <!-- ===== NAVBAR ===== -->
+      <nav class="mainnav" aria-label="Navegación principal">
         <ul class="mainnav__list">
-            <li><a class="mainnav__link is-active" href="{{ route('inicio') }}">Inicio</a></li>
-            <li><a class="mainnav__link" href="{{ route('nuevo') }}">Nuevo</a></li>
-            <li><a class="mainnav__link" href="{{ route('productos') }}">Productos</a></li>
-            <li><a class="mainnav__link" href="{{ route('ofertas') }}">Ofertas</a></li>
-            <li><a class="mainnav__link" href="{{ route('contacto') }}">Contacto</a></li>
-            <li><a class="mainnav__link" href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
+          <li><a class="mainnav__link" href="{{ route('inicio') }}">Inicio</a></li>
+          <li><a class="mainnav__link" href="{{ route('nuevo') }}">Nuevo</a></li>
+          <li><a class="mainnav__link" href="{{ route('productos') }}">Productos</a></li>
+          <li><a class="mainnav__link is-active" href="{{ route('contacto') }}">Contacto</a></li>
+          <li><a class="mainnav__link" href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
         </ul>
-        </nav>
+      </nav>
     </header>
 
     <main>

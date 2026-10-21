@@ -1,58 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AURA CLOTHES</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('css/inicio.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA CLOTHES</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('css/inicio.css') }}">
 </head>
 <body>
 
-<a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <button class="icon-btn icon-btn--search" type="button" aria-label="Buscar productos">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span class="icon-btn__label">Buscar</span>
+        </button>
 
-<!-- ===== BARRA SUPERIOR ===== -->
-<div class="topbar">
-  <div class="topbar__inner">
 
-    <button class="icon-btn icon-btn--search" type="button" aria-label="Buscar productos">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <span class="icon-btn__label">Buscar</span>
-    </button>
+        <a class="logo" href="index.html" aria-label="AURA CLOTHES, ir al inicio">
+          <span class="logo__mark">AC</span>
+          <span class="logo__word">AURA CLOTHES</span>
+        </a>
 
-    <a class="logo" href="#" aria-label="AURA CLOTHES, ir al inicio">
-      <span class="logo__mark">AC</span>
-      <span class="logo__word">AURA CLOTHES</span>
-    </a>
+        <div class="topbar__actions">
 
-    <div class="topbar__actions">
-      <button class="icon-btn" type="button" aria-label="Mi cuenta">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>
-        <span class="icon-btn__label">Cuenta</span>
-      </button>
-      <button class="icon-btn" type="button" aria-label="Ver carrito, 3 productos">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.5 10.5a2 2 0 0 1-2 1.5H7.5a2 2 0 0 1-2-1.5L4 6z"></path><path d="M8 6V5a4 4 0 0 1 8 0v1"></path></svg>
-        <span class="icon-btn__label">Carrito</span>
-        <span class="icon-btn__badge">3</span>
-      </button>
-    </div>
 
-  </div>
-</div>
+          <button class="icon-btn" type="button" aria-label="Mi cuenta">
+            <a href="{{ route('cuenta') }}">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>
+                <span class="icon-btn__label">Cuenta</span>
+            </a>
+          </button>
 
-<!-- ===== NAVEGACIÓN PRINCIPAL ===== -->
-<nav class="mainnav" aria-label="Navegación principal">
-  <ul class="mainnav__list">
-    <li><a class="mainnav__link is-active" href="{{ route('inicio') }}">Inicio</a></li>
-    <li><a class="mainnav__link" href="{{ route('nuevo') }}">Nuevo</a></li>
-    <li><a class="mainnav__link" href="{{ route('productos') }}">Productos</a></li>
-    <li><a class="mainnav__link" href="{{ route('ofertas') }}">Ofertas</a></li>
-    <li><a class="mainnav__link" href="{{ route('contacto') }}">Contacto</a></li>
-    <li><a class="mainnav__link" href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
-  </ul>
-</nav>
+
+          <button class="icon-btn" type="button" aria-label="Ver carrito, 3 productos">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.5 10.5a2 2 0 0 1-2 1.5H7.5a2 2 0 0 1-2-1.5L4 6z"></path><path d="M8 6V5a4 4 0 0 1 8 0v1"></path></svg>
+            <span class="icon-btn__label">Carrito</span>
+            <span class="icon-btn__badge">3</span>
+          </button>
+        </div>
+      </div>
+    
+
+      <!-- ===== NAVBAR ===== -->
+      <nav class="mainnav" aria-label="Navegación principal">
+        <ul class="mainnav__list">
+          <li><a class="mainnav__link is-active" href="{{ route('inicio') }}" >Inicio</a></li>
+          <li><a class="mainnav__link" href="{{ route('nuevo') }}">Nuevo</a></li>
+          <li><a class="mainnav__link " href="{{ route('productos') }}">Productos</a></li>
+          <li><a class="mainnav__link" href="{{ route('contacto') }}">Contacto</a></li>
+          <li><a class="mainnav__link" href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
+        </ul>
+      </nav>
+    </header>
+
 
 <main id="contenido">
 
