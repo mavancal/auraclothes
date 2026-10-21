@@ -18,4 +18,14 @@ class EstadoPedido extends Model
     public const ENVIADO = 'Enviado';
     public const ENTREGADO = 'Entregado';
     public const CANCELADO = 'Cancelado';
+
+    //MAPEO ESTADOS
+    public const TRANSICIONES = [
+        self::PENDIENTE      => [self::PAGADO, self::CANCELADO],
+        self::PAGADO         => [self::EN_PREPARACION, self::CANCELADO],
+        self::EN_PREPARACION => [self::ENVIADO, self::CANCELADO],
+        self::ENVIADO        => [self::ENTREGADO],
+        self::ENTREGADO      => [],
+        self::CANCELADO      => [],
+];
 }

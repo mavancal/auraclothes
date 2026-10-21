@@ -127,4 +127,45 @@ class PedidoService
 
         return $lineas;
     }
+
+    public function cambiarEstado(Pedido $pedido, string $nuevoEstado): Pedido
+    {
+        return DB::transaction(function () use ($pedido, $nuevoEstado) {
+            // Volvemos a leer el pedido bloqueado, por si otro proceso lo cambió
+            $pedido = Pedido::with('estadoPedido')
+                ->whereKey($pedido->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            $actual = $pedido->estadoPedido->descripcion;
+
+            if (! in_array($nuevoEstado, EstadoPedido::TRANSICIONES[$actual] ?? [], true)) {
+                throw new PedidoInvalidoException(
+                    "No se puede pasar un pedido de \"{$actual}\" a \"{$nuevoEstado}\"."
+                );
+            }
+
+            $estado = EstadoPedido::where('descripcion', $nuevoEstado)->firstOrFail();
+
+            if ($nuevoEstado === EstadoPedido::CANCELADO) {
+                $this->devolverStock($pedido);
+            }
+
+            $pedido->update(['estado_pedido_id' => $estado->id]);
+
+            return $pedido->fresh(['estadoPedido']);
+        });
+    }
+
+    public function cancelar(Pedido $pedido): Pedido
+    {
+        return $this->cambiarEstado($pedido, EstadoPedido::CANCELADO);
+    }
+
+    private function devolverStock(Pedido $pedido): void
+    {
+        foreach ($pedido->detalles()->orderBy('producto_id')->get() as $detalle) {
+            Producto::whereKey($detalle->producto_id)->increment('stock', $detalle->cantidad);
+        }
+    }
 }
