@@ -13,4 +13,14 @@ class DetallePedido extends Model
     public function producto() { 
         return $this->belongsTo(Producto::class); 
     }
+
+    protected $fillable = ['pedido_id', 'producto_id', 'cantidad', 'precio_unitario'];
+
+    protected function casts(): array
+    {
+        return [
+            'cantidad' => 'integer',
+            'precio_unitario' => 'decimal:2',
+        ];
     }
+}

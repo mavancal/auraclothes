@@ -34,7 +34,8 @@ class User extends Authenticatable
         'email',
         'password',
         'contacto_id',
-        'activo'
+        'activo',
+        'ultimo_acceso'
     ];
 
     /**
@@ -57,6 +58,13 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'ultimo_acceso' => 'datetime',
+            'activo' => 'boolean'
         ];
+    }
+
+    public function scopeActivos($query)
+    {
+        return $query->where('activo', true);
     }
 }

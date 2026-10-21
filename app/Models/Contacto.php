@@ -16,4 +16,14 @@ class Contacto extends Model
         return $this->belongsToMany(CategoriaUsuario::class, 'categoria_us_contacto', 'contacto_id', 'categoria_us_id')
                     ->withPivot('fecha_asig');
     }
+
+    protected $fillable = [
+        'nombre', 'nombre2', 'apellido', 'tipo_documento_id', 'numero_documento',
+        'cuit', 'fecha_nacimiento', 'telefono', 'email_contacto', 'tipo_persona_id',
+    ];
+
+    protected function casts(): array
+    {
+        return ['fecha_nacimiento' => 'date'];
+    }
 }

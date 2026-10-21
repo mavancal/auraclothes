@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class MetodoPago extends Model
 {
     protected $table = 'metodos_pago';
-    protected $guarded = [];
+    protected $fillable = ['metodo'];
     public function pedidos() { 
         return $this->hasMany(Pedido::class); 
     }
