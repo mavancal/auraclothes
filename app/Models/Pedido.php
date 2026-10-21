@@ -33,4 +33,23 @@ class Pedido extends Model
     {
         return $this->subtotal() - $this->descuento + $this->costo_envio;
     }
+
+    protected $fillable = [
+        'user_id', 'estado_pedido_id', 'fecha_ped', 'descuento',
+        'costo_envio', 'metodo_pago_id', 'direccion_envio_id',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'fecha_ped' => 'datetime',
+            'descuento' => 'decimal:2',
+            'costo_envio' => 'decimal:2',
+        ];
+    }
+
+    public function scopeDelUsuario($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
 }
