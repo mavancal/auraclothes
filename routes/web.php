@@ -8,7 +8,6 @@ Route::view('/','inicio')->name('inicio');
 
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index');
 
-
 Route::view('/nuevo','nuevo')->name('nuevo');
 
 Route::view('/ofertas','ofertas')->name('ofertas');
