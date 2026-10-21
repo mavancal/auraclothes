@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\CategoriaProducto;
-use App\Models\CategoriaUs;
 use App\Models\CategoriaUsuario;
 use App\Models\Coleccion;
 use App\Models\EstadoPedido;
@@ -55,10 +54,11 @@ class CatalogosSeeder extends Seeder
             $misiones->localidades()->create(['descripcion' => $nombre]);
         }
 
-        Coleccion::create(['nombre_coleccion' => 'Verano 2026']);
-        Coleccion::create(['nombre_coleccion' => 'Invierno 2026']);
+        foreach (['Otoño 2026', 'Invierno 2025', 'Verano 2025', 'Basicos'] as $nombre){
+            Coleccion::create(['nombre_coleccion' => $nombre]);
+        }
 
-        foreach (['Remeras', 'Pantalones', 'Camperas', 'Accesorios'] as $nombre) {
+        foreach (['Remeras', 'Pantalones', 'Buzos', 'HeadWear', 'Accesorios', 'Mochilas'] as $nombre) {
             CategoriaProducto::create(['nombre_categoria' => $nombre]);
         }
 
