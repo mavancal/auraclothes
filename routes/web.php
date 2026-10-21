@@ -12,8 +12,6 @@ Route::view('/productos','productos')->name('productos');
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos');
 
 
-
-
 Route::view('/nuevo','nuevo')->name('nuevo');
 
 Route::view('/contacto','contacto')->name('contacto');
