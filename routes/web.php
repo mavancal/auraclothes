@@ -4,7 +4,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/','inicio')->name('inicio');
 
+<<<<<<< Updated upstream
 Route::view('/productos','productos')->name('productos');
+=======
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos');
+>>>>>>> Stashed changes
 
 Route::view('/nuevo','nuevo')->name('nuevo');
 
