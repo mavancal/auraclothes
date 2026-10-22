@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Contacto extends Model
 {
-    protected $guarded = [];
+    use HasFactory;
+    
     public function tipoDocumento() { return $this->belongsTo(TipoDocumento::class); }
     public function tipoPersona() { return $this->belongsTo(TipoPersona::class); }
     public function direcciones() { return $this->hasMany(Direccion::class); }
