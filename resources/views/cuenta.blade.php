@@ -81,7 +81,9 @@
 
           <div class="login-actions">
             <button class="btn btn--primary" type="submit">Iniciar sesión</button>
-            <button class="btn btn--secondary" type="button">Registrarse</button>
+            <a href="{{ route('registro') }}">
+              <button class="btn btn--secondary" type="button">Registrarse</button>
+            </a>
           </div>
         </form>
       </section>
