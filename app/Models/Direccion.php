@@ -10,7 +10,6 @@ class Direccion extends Model
     use HasFactory;
 
     protected $table = 'direcciones';
-    protected $guarded = [];
     public function localidad() { 
         return $this->belongsTo(Localidad::class); 
     }
