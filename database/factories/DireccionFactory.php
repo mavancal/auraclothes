@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Direccion;
 use App\Models\Contacto;
+use App\Models\Localidad;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,7 +24,7 @@ class DireccionFactory extends Factory
             'numero' => (string) fake()->numberBetween(1, 5000),
             'cod_postal' => '3300',
             'es_principal' => true,
-            'localidad_id' => 1,
+            'localidad_id' => Localidad::query()->value('id'),
             'contacto_id' => Contacto::factory(),
         ];
     }

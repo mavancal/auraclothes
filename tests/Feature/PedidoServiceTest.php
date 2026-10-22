@@ -7,6 +7,7 @@ use App\Models\Direccion;
 use App\Models\EstadoPedido;
 use App\Models\Producto;
 use App\Models\User;
+use App\Models\MetodoPago;
 use App\Services\PedidoService;
 use Database\Seeders\CatalogosSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,12 +20,14 @@ class PedidoServiceTest extends TestCase
     private PedidoService $servicio;
     private User $user;
     private Direccion $direccion;
+    private int $metodoPagoId;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->seed(CatalogosSeeder::class);
+        $this->metodoPagoId = MetodoPago::query()->value('id');
 
         $this->user = User::factory()->create();
         $this->direccion = Direccion::factory()->create([
@@ -41,7 +44,7 @@ class PedidoServiceTest extends TestCase
         $pedido = $this->servicio->crear($this->user, [
             ['producto_id' => $normal->id, 'cantidad' => 2],
             ['producto_id' => $oferta->id, 'cantidad' => 1],
-        ], $this->direccion->id, 1, 500);
+        ], $this->direccion->id, $this->metodoPagoId, 500);
 
         $this->assertSame(28500.0, (float) $pedido->total()); // 20000 + 8000 + 500
         $this->assertSame(8, $normal->fresh()->stock);
@@ -55,7 +58,7 @@ class PedidoServiceTest extends TestCase
         try {
             $this->servicio->crear($this->user, [
                 ['producto_id' => $producto->id, 'cantidad' => 5],
-            ], $this->direccion->id, 1);
+            ], $this->direccion->id, $this->metodoPagoId);
             $this->fail('Tendría que haber lanzado PedidoInvalidoException');
         } catch (PedidoInvalidoException) {
             // esperado
@@ -74,7 +77,7 @@ class PedidoServiceTest extends TestCase
 
         $this->servicio->crear($this->user, [
             ['producto_id' => $producto->id, 'cantidad' => 1],
-        ], $ajena->id, 1);
+        ], $ajena->id, $this->metodoPagoId);
     }
 
     public function test_unifica_productos_repetidos_en_una_linea(): void
@@ -84,7 +87,7 @@ class PedidoServiceTest extends TestCase
         $pedido = $this->servicio->crear($this->user, [
             ['producto_id' => $producto->id, 'cantidad' => 1],
             ['producto_id' => $producto->id, 'cantidad' => 2],
-        ], $this->direccion->id, 1);
+        ], $this->direccion->id, $this->metodoPagoId);
 
         $this->assertCount(1, $pedido->detalles);
         $this->assertSame(3, $pedido->detalles->first()->cantidad);
@@ -96,7 +99,7 @@ class PedidoServiceTest extends TestCase
 
         $pedido = $this->servicio->crear($this->user, [
             ['producto_id' => $producto->id, 'cantidad' => 4],
-        ], $this->direccion->id, 1);
+        ], $this->direccion->id, $this->metodoPagoId);
 
         $this->assertSame(6, $producto->fresh()->stock);
 
@@ -111,7 +114,7 @@ class PedidoServiceTest extends TestCase
 
         $pedido = $this->servicio->crear($this->user, [
             ['producto_id' => $producto->id, 'cantidad' => 1],
-        ], $this->direccion->id, 1);
+        ], $this->direccion->id, $this->metodoPagoId);
 
         $this->servicio->cancelar($pedido);
 
@@ -126,7 +129,7 @@ class PedidoServiceTest extends TestCase
 
         $otro = $this->servicio->crear($this->user, [
             ['producto_id' => $producto->id, 'cantidad' => 1],
-        ], $this->direccion->id, 1);
+        ], $this->direccion->id, $this->metodoPagoId);
 
         $this->expectException(PedidoInvalidoException::class);
         $this->servicio->cambiarEstado($otro, EstadoPedido::ENTREGADO); // Pendiente → Entregado
