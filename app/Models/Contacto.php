@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Contacto extends Model
 {
     use HasFactory;
-
-    protected $guarded = [];
+    
     public function tipoDocumento() { return $this->belongsTo(TipoDocumento::class); }
     public function tipoPersona() { return $this->belongsTo(TipoPersona::class); }
     public function direcciones() { return $this->hasMany(Direccion::class); }

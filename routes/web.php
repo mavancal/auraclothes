@@ -6,9 +6,6 @@ use App\Http\Controllers\ProductoController;
 
 Route::view('/','inicio')->name('inicio');
 
-
-Route::view('/productos','productos')->name('productos');
-
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos');
 
 Route::view('/nuevo','nuevo')->name('nuevo');
