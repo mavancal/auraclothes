@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\PanelProductosController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RegistroController;
 
@@ -22,4 +23,7 @@ Route::view('/cuenta','cuenta')->name('cuenta');
 Route::get('/registro', [RegistroController::class, 'create'])->name('registro');
 Route::post('/registro', [RegistroController::class, 'store'])->name('registro.store');
 
-Route::view('/panel_productos_admin','vistas_admin.panel_productos_admin')->name('panel_productos_admin');
+Route::get('/panel_productos_admin', [PanelProductosController::class, 'index'])->name('panel_productos_admin');
+Route::post('/panel_productos_admin/productos', [PanelProductosController::class, 'storeProducto'])->name('panel_productos_admin.productos.store');
+Route::post('/panel_productos_admin/colecciones', [PanelProductosController::class, 'storeColeccion'])->name('panel_productos_admin.colecciones.store');
+Route::post('/panel_productos_admin/categorias', [PanelProductosController::class, 'storeCategoria'])->name('panel_productos_admin.categorias.store');
