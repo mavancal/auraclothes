@@ -42,6 +42,11 @@
           <h2>{{ session('success') }}</h2>
         </div>
       @endif
+      @if(session('error'))
+        <div class="error-summary" style="color:#b00020;margin-bottom:1rem;">
+          <p>{{ session('error') }}</p>
+        </div>
+      @endif
       @if($errors->any())
         <div class="error-summary" style="color:#b00020;margin-bottom:1rem;">
           <p>Hay errores en el formulario. Revisá los campos marcados.</p>
@@ -166,6 +171,112 @@
         </div>
 
       </div>
+
+      <section class="admin-card" style="margin-top:2rem;">
+        <h2 class="card-title">Gestión de Colecciones</h2>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:.5rem;">Nombre</th>
+              <th style="text-align:right;padding:.5rem;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($colecciones ?? [] as $coleccion)
+              <tr>
+                <td style="padding:.5rem;">
+                  <form method="POST" action="{{ route('panel_productos_admin.colecciones.update', $coleccion) }}" style="display:flex;gap:.5rem;align-items:center;">
+                    @csrf
+                    @method('PUT')
+                    <input type="text" name="nombre_coleccion" value="{{ $coleccion->nombre_coleccion }}" required style="flex:1;">
+                    <button type="submit" class="btn btn--secondary">Guardar</button>
+                  </form>
+                </td>
+                <td style="padding:.5rem;text-align:right;">
+                  <form method="POST" action="{{ route('panel_productos_admin.colecciones.destroy', $coleccion) }}" onsubmit="return confirm('¿Eliminar esta colección?');" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn--outline">Eliminar</button>
+                  </form>
+                </td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </section>
+
+      <section class="admin-card" style="margin-top:2rem;">
+        <h2 class="card-title">Gestión de Categorías</h2>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:.5rem;">Nombre</th>
+              <th style="text-align:right;padding:.5rem;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($categorias ?? [] as $categoria)
+              <tr>
+                <td style="padding:.5rem;">
+                  <form method="POST" action="{{ route('panel_productos_admin.categorias.update', $categoria) }}" style="display:flex;gap:.5rem;align-items:center;">
+                    @csrf
+                    @method('PUT')
+                    <input type="text" name="nombre_categoria" value="{{ $categoria->nombre_categoria }}" required style="flex:1;">
+                    <button type="submit" class="btn btn--secondary">Guardar</button>
+                  </form>
+                </td>
+                <td style="padding:.5rem;text-align:right;">
+                  <form method="POST" action="{{ route('panel_productos_admin.categorias.destroy', $categoria) }}" onsubmit="return confirm('¿Eliminar esta categoría?');" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn--outline">Eliminar</button>
+                  </form>
+                </td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </section>
+
+      <section class="admin-card" style="margin-top:2rem;">
+        <h2 class="card-title">Gestión de Productos</h2>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:.5rem;">SKU</th>
+              <th style="text-align:left;padding:.5rem;">Nombre</th>
+              <th style="text-align:left;padding:.5rem;">Precio</th>
+              <th style="text-align:left;padding:.5rem;">Oferta</th>
+              <th style="text-align:left;padding:.5rem;">Colección</th>
+              <th style="text-align:left;padding:.5rem;">Categoría</th>
+              <th style="text-align:left;padding:.5rem;">Activo</th>
+              <th style="text-align:right;padding:.5rem;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($productos ?? [] as $producto)
+              <tr>
+                <td style="padding:.5rem;">{{ $producto->sku }}</td>
+                <td style="padding:.5rem;">{{ $producto->nombre }}</td>
+                <td style="padding:.5rem;">{{ $producto->precio }}</td>
+                <td style="padding:.5rem;">{{ $producto->precio_oferta ?? '-' }}</td>
+                <td style="padding:.5rem;">{{ $producto->coleccion?->nombre_coleccion ?? '-' }}</td>
+                <td style="padding:.5rem;">{{ $producto->categorias->pluck('nombre_categoria')->join(', ') ?: '-' }}</td>
+                <td style="padding:.5rem;">{{ $producto->activo ? 'Sí' : 'No' }}</td>
+                <td style="padding:.5rem;text-align:right;">
+                  <a class="btn btn--secondary" href="{{ route('panel_productos_admin.productos.edit', $producto) }}">Editar</a>
+                  <form method="POST" action="{{ route('panel_productos_admin.productos.destroy', $producto) }}" onsubmit="return confirm('¿Eliminar este producto?');" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn--outline">Eliminar</button>
+                  </form>
+                </td>
+              </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </section>
+
     </main>
 
     <script src="admin.js"></script>
