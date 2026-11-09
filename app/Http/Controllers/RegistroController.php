@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contacto;
 use App\Models\Localidad;
 use App\Models\Provincia;
-use App\Models\Rol;
 use App\Models\TipoDocumento;
 use App\Models\TipoPersona;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use App\Services\RegistroService;
+use App\Exceptions\RegistroInvalidoException;
 
 class RegistroController extends Controller
 {
@@ -70,45 +68,11 @@ class RegistroController extends Controller
             return back()->withErrors(['localidad_id' => 'La localidad no pertenece a la provincia seleccionada.'])->withInput();
         }
 
-        DB::transaction(function () use ($validated, $cuit) {
-            $contacto = Contacto::create([
-                'nombre' => $validated['nombre'],
-                'nombre2' => $validated['nombre2'] ?? null,
-                'apellido' => $validated['apellido'],
-                'tipo_documento_id' => $validated['tipo_documento_id'],
-                'numero_documento' => $validated['numero_documento'],
-                'cuit' => $cuit,
-                'fecha_nacimiento' => $validated['fecha_nacimiento'],
-                'telefono' => $validated['telefono'],
-                'email_contacto' => $validated['email_contacto'],
-                'tipo_persona_id' => $validated['tipo_persona_id'],
-            ]);
-
-            $contacto->direcciones()->create([
-                'calle' => $validated['calle'],
-                'numero' => $validated['numero'],
-                'piso' => $validated['piso'] ?? null,
-                'departamento' => $validated['departamento'] ?? null,
-                'cod_postal' => $validated['cod_postal'] ?? null,
-                'es_principal' => true,
-                'referencia' => $validated['referencia'] ?? null,
-                'localidad_id' => $validated['localidad_id'],
-            ]);
-
-            $user = User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'password' => $validated['password'],
-                'contacto_id' => $contacto->id,
-                'activo' => true,
-            ]);
-
-            $rolCliente = Rol::where('nombre_rol', 'Cliente')->first();
-            if ($rolCliente) {
-                $user->roles()->attach($rolCliente->id);
-            }
-        });
-
+        try {
+            app(RegistroService::class)->registrar($validated);
+        } catch (RegistroInvalidoException $e) {
+            return back()->withErrors(['registro' => $e->getMessage()])->withInput();
+        }
         return redirect()->route('registro')->with('success', 'Cuenta creada correctamente.');
     }
 }
