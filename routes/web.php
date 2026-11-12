@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PanelProductosController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RegistroController;
+use App\Http\Controllers\SesionController;
 
 Route::view('/','inicio')->name('inicio');
 
@@ -18,7 +19,9 @@ Route::view('/contacto','contacto')->name('contacto');
 Route::view('/quienes-somos','quienes-somos')->name('quienes-somos');
 
 
-Route::view('/cuenta','cuenta')->name('cuenta');
+Route::get('/cuenta', [SesionController::class, 'create'])->name('cuenta');
+Route::post('/login', [SesionController::class, 'store'])->middleware('throttle:5,1')->name('sesion.iniciar');
+Route::post('/logout', [SesionController::class, 'destroy'])->name('sesion.cerrar');
 
 Route::get('/registro', [RegistroController::class, 'create'])->name('registro');
 Route::post('/registro', [RegistroController::class, 'store'])->name('registro.store');
