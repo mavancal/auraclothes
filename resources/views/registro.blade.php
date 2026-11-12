@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
   <head>
     <!-- figma:head-start -->
@@ -105,76 +105,6 @@
                 <input type="email" id="email" name="email" autocomplete="email" required />
                 @error('email') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
-
-
-
-              <div class="form-field">
-                <label for="es_principal">Provincia</label>
-                <select name="provincia" id="provincia" required>
-  
-                </select>
-              </div>
-
-
-
-
-
-              <div class="form-field">
-                <label for="localidad">Localidad</label>
-                <input type="text" id="localidad" name="localidad" autocomplete="localidad" required>
-              </div>
-
-
-
-              <div class="form-field">
-                <label for="cod_postal">Código Postal</label>
-                <input type="text" id="cod_postal" name="cod_postal" autocomplete="cod_postal" required>
-              </div>
-
-
-
-              <div class="form-field">
-                <label for="calle">Calle</label>
-                <input type="text" id="calle" name="calle" autocomplete="calle" required />
-              </div>
-
-
-
-              <div class="form-field">
-                <label for="numero">Numeracion</label>
-                <input type="text" id="numero" name="numero" autocomplete="numeracion" required>
-              </div>
-
-              <div class="form-field">
-                <label for="piso">Piso</label>
-                <input type="text" id="piso" name="piso" autocomplete="piso">
-              </div>
-
-
-              <div class="form-field">
-                <label for="departamento">Departamento</label>
-                <input type="text" id="departamento" name="departamento" autocomplete="departamento">
-              </div>
-
-              
-
-              <div class="form-field">
-                <label for="es_principal">Es la direccion principal</label>
-                <select name="es_principal" id="es_principal" required>
-                  <option value="true">Si</option>
-                  <option value="false">No</option>
-                </select>
-              </div>
-
-              <div class="form-field">
-                <label for="referencia">Referencia</label>
-                <input type="textfield" id="referencia" name="referencia" autocomplete="referencia">
-              </div>
-
-
-
-              
-
             </div>
 
           </fieldset>
@@ -235,13 +165,7 @@
                   @foreach($tiposDocumento ?? [] as $tipoDocumento)
                     <option value="{{ $tipoDocumento->id }}">{{ $tipoDocumento->descripcion }}</option>
                   @endforeach
-                <label for="id_tipo_doc">Tipo de documento</label>
-                <select id="id_tipo_doc" name="id_tipo_doc" required>
-
-
-
-                  
-                </select>
+</select>
                 @error('tipo_documento_id') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
