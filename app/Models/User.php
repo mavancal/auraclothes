@@ -67,4 +67,19 @@ class User extends Authenticatable
     {
         return $query->where('activo', true);
     }
+    /**
+     * El nivel mas alto entre los roles del usuario (0 si no tiene roles).
+     */
+    public function nivelPermiso(): int
+    {
+        return (int) $this->roles->max('nivel_permiso');
+    }
+
+    /**
+     * ¿Tiene un rol con este nivel o mas?
+     */
+    public function tieneNivel(int $minimo): bool
+    {
+        return $this->nivelPermiso() >= $minimo;
+    }
 }

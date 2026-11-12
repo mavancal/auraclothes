@@ -11,7 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'nivel' => \App\Http\Middleware\NivelPermiso::class,
+        ]);
+
+        //Sin sesion iniciada -> al formulario de login
+        $middleware->redirectGuestsTo(fn () => route('cuenta'));
+
+        //Con sesion iniciada, si entra a /cuenta -> al inicio
+        $middleware->redirectUsersTo(fn () => route('inicio'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
