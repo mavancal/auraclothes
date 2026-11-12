@@ -69,5 +69,23 @@ class DatosDemoSeeder extends Seeder
             'cantidad' => 1,
             'precio_unitario' => $gorro->precio_oferta ?? $gorro->precio,
         ]);
+                // Un administrador para probar el panel de productos
+        $contactoAdmin = Contacto::create([
+            'nombre' => 'Admin',
+            'apellido' => 'Aura',
+            'tipo_documento_id' => TipoDocumento::where('descripcion', 'DNI')->first()->id,
+            'numero_documento' => '20000000',
+            'tipo_persona_id' => TipoPersona::where('descripcion', 'Física')->first()->id,
+            'email_contacto' => 'admin@auraclothes.com',
+        ]);
+
+        $admin = User::create([
+            'name' => 'admin',
+            'email' => 'admin@auraclothes.com',
+            'password' => 'admin1234',
+            'contacto_id' => $contactoAdmin->id,
+        ]);
+
+        $admin->roles()->attach(Rol::where('nombre_rol', 'Administrador')->first()->id);
     }
 }

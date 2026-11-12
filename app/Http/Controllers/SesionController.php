@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Exceptions\SesionInvalidaException;
+use App\Services\SesionService;
+use Illuminate\Http\Request;
+
+class SesionController extends Controller
+{
+    /**
+     * Muestra el formulario de inicio de sesión (vista "cuenta").
+     */
+    public function create()
+    {
+        return view('cuenta');
+    }
+
+    /**
+     * Procesa el formulario de inicio de sesión.
+     */
+    public function store(Request $request, SesionService $sesion)
+    {
+        $datos = $request->validate([
+            'email'    => ['required', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
+        try {
+            $sesion->iniciar($datos['email'], $datos['password'], $request->boolean('recordar'));
+        } catch (SesionInvalidaException $e) {
+            return back()
+                ->withErrors(['email' => $e->getMessage()])
+                ->onlyInput('email');
+        }
+
+        // Nuevo id de sesión al entrar (evita el robo de sesión)
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('inicio'));
+    }
+
+    /**
+     * Cierra la sesión.
+     */
+    public function destroy(Request $request, SesionService $sesion)
+    {
+        $sesion->cerrar();
+
+        // Borra los datos de la sesión y genera un token CSRF nuevo
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('inicio');
+    }
+}
