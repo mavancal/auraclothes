@@ -6,11 +6,16 @@ use App\Http\Controllers\PanelProductosController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\SesionController;
+use App\Http\Controllers\CarritoController;
 
 Route::view('/','inicio')->name('inicio');
 
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos');
-
+Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
+Route::post('/carrito', [CarritoController::class, 'agregar'])->name('carrito.agregar');
+Route::patch('/carrito/{productoId}', [CarritoController::class, 'actualizar'])->whereNumber('productoId')->name('carrito.actualizar');
+Route::delete('/carrito/{productoId}', [CarritoController::class, 'quitar'])->whereNumber('productoId')->name('carrito.quitar');
+Route::delete('/carrito', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
 
 Route::view('/nuevo','nuevo')->name('nuevo');
 
