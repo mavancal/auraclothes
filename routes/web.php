@@ -8,6 +8,7 @@ use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\MisPedidosController;
 
 Route::view('/','inicio')->name('inicio');
 
@@ -21,6 +22,9 @@ Route::delete('/carrito', [CarritoController::class, 'vaciar'])->name('carrito.v
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.confirmar');
+    Route::get('/mis-pedidos', [MisPedidosController::class, 'index'])->name('mis-pedidos');
+    Route::get('/mis-pedidos/{pedido}', [MisPedidosController::class, 'show'])->name('mis-pedidos.show');
+    Route::post('/mis-pedidos/{pedido}/cancelar', [MisPedidosController::class, 'cancelar'])->name('mis-pedidos.cancelar');
 });
 
 Route::view('/nuevo','nuevo')->name('nuevo');
