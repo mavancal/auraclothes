@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\RegistroController;
 use App\Http\Controllers\SesionController;
 use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\CheckoutController;
 
 Route::view('/','inicio')->name('inicio');
 
@@ -16,6 +17,11 @@ Route::post('/carrito', [CarritoController::class, 'agregar'])->name('carrito.ag
 Route::patch('/carrito/{productoId}', [CarritoController::class, 'actualizar'])->whereNumber('productoId')->name('carrito.actualizar');
 Route::delete('/carrito/{productoId}', [CarritoController::class, 'quitar'])->whereNumber('productoId')->name('carrito.quitar');
 Route::delete('/carrito', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.confirmar');
+});
 
 Route::view('/nuevo','nuevo')->name('nuevo');
 
