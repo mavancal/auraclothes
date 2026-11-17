@@ -111,4 +111,16 @@ class CheckoutTest extends TestCase
         $this->assertSame(2, $this->producto->fresh()->stock);
         $this->assertSame(5, $this->cantidadEnCarrito());
     }
+
+        public function test_un_metodo_de_pago_inexistente_da_error_en_su_campo(): void
+    {
+        $this->agregarAlCarrito(1);
+
+        $this->from(route('checkout'))
+            ->post(route('checkout.confirmar'), $this->datosCheckout(['metodo_pago_id' => 999999]))
+            ->assertSessionHasErrors('metodo_pago_id');
+
+        $this->assertSame(0, Pedido::count());
+        $this->assertStringContainsString('método de pago', session('errors')->first('metodo_pago_id'));
+    }
 }

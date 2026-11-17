@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\SesionInvalidaException;
 use App\Services\SesionService;
 use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
 
 class SesionController extends Controller
 {
@@ -19,12 +20,9 @@ class SesionController extends Controller
     /**
      * Procesa el formulario de inicio de sesión.
      */
-    public function store(Request $request, SesionService $sesion)
+    public function store(LoginRequest $request, SesionService $sesion)
     {
-        $datos = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required', 'string'],
-        ]);
+        $datos = $request->validated();
 
         try {
             $sesion->iniciar($datos['email'], $datos['password'], $request->boolean('recordar'));

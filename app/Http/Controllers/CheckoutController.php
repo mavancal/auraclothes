@@ -7,6 +7,7 @@ use App\Models\MetodoPago;
 use App\Services\CarritoService;
 use App\Services\PedidoService;
 use Illuminate\Http\Request;
+use App\Http\Requests\CheckoutRequest;
 
 class CheckoutController extends Controller
 {
@@ -34,12 +35,9 @@ class CheckoutController extends Controller
     /**
      * Confirma la compra: convierte el carrito en un pedido.
      */
-    public function store(Request $request, PedidoService $pedidos)
+    public function store(CheckoutRequest $request, PedidoService $pedidos)
     {
-        $datos = $request->validate([
-            'direccion_id'   => ['required', 'integer'],
-            'metodo_pago_id' => ['required', 'integer'],
-        ]);
+        $datos = $request->validated();
 
         try {
             $pedido = $pedidos->crear(
