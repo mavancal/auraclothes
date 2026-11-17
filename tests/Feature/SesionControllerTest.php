@@ -61,4 +61,13 @@ class SesionControllerTest extends TestCase
 
         $this->assertGuest();
     }
+
+        public function test_el_login_vacio_muestra_los_campos_en_espanol(): void
+    {
+        $this->post(route('sesion.iniciar'), [])
+            ->assertSessionHasErrors(['email', 'password']);
+
+        $this->assertStringContainsString('correo electrónico', session('errors')->first('email'));
+        $this->assertStringContainsString('contraseña', session('errors')->first('password'));
+    }
 }
