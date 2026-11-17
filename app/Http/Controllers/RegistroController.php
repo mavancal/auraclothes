@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\RegistroInvalidoException;
+use App\Http\Requests\RegistroRequest;
 use App\Models\Localidad;
 use App\Models\Provincia;
 use App\Models\TipoDocumento;
 use App\Models\TipoPersona;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Services\RegistroService;
-use App\Exceptions\RegistroInvalidoException;
 
 class RegistroController extends Controller
 {
@@ -23,56 +22,15 @@ class RegistroController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(RegistroRequest $request, RegistroService $registro)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255', 'unique:users,name'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'nombre' => ['required', 'string', 'max:50'],
-            'nombre2' => ['nullable', 'string', 'max:50'],
-            'apellido' => ['required', 'string', 'max:80'],
-            'fecha_nacimiento' => ['required', 'date'],
-            'tipo_persona_id' => ['required', 'exists:tipos_persona,id'],
-            'cuit' => ['nullable', 'string'],
-            'tipo_documento_id' => ['required', 'exists:tipos_documento,id'],
-            'numero_documento' => [
-                'required', 'string', 'max:20',
-                Rule::unique('contactos', 'numero_documento')
-                    ->where('tipo_documento_id', $request->input('tipo_documento_id')),
-            ],
-            'telefono' => ['required', 'string', 'max:20'],
-            'email_contacto' => ['required', 'email', 'max:120'],
-            'calle' => ['required', 'string', 'max:120'],
-            'numero' => ['required', 'string', 'max:10'],
-            'piso' => ['nullable', 'string', 'max:10'],
-            'departamento' => ['nullable', 'string', 'max:10'],
-            'cod_postal' => ['nullable', 'string', 'max:10'],
-            'provincia_id' => ['required', 'exists:provincias,id'],
-            'localidad_id' => ['required', 'exists:localidades,id'],
-            'referencia' => ['nullable', 'string', 'max:255'],
-        ]);
-
-        // Limpieza del CUIT: se guardan solo los 11 dígitos.
-        $cuit = isset($validated['cuit']) ? preg_replace('/\D/', '', $validated['cuit']) : null;
-        if ($cuit === '') {
-            $cuit = null;
-        }
-        if ($cuit !== null && strlen($cuit) !== 11) {
-            return back()->withErrors(['cuit' => 'El CUIT debe tener 11 dígitos.'])->withInput();
-        }
-
-        // La localidad debe pertenecer a la provincia elegida.
-        $localidad = Localidad::findOrFail($validated['localidad_id']);
-        if ((int) $localidad->provincia_id !== (int) $validated['provincia_id']) {
-            return back()->withErrors(['localidad_id' => 'La localidad no pertenece a la provincia seleccionada.'])->withInput();
-        }
-
+        // Si llegamos acá, los datos ya pasaron todas las reglas de RegistroRequest
         try {
-            app(RegistroService::class)->registrar($validated);
+            $registro->registrar($request->validated());
         } catch (RegistroInvalidoException $e) {
             return back()->withErrors(['registro' => $e->getMessage()])->withInput();
         }
+
         return redirect()->route('registro')->with('success', 'Cuenta creada correctamente.');
     }
 }
