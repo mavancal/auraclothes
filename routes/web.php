@@ -9,6 +9,7 @@ use App\Http\Controllers\SesionController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\MisPedidosController;
+use App\Http\Controllers\PanelPedidosController;
 
 Route::view('/','inicio')->name('inicio');
 
@@ -53,4 +54,7 @@ Route::middleware(['auth', 'nivel:50'])->group(function (){
     Route::post('/panel_productos_admin/categorias', [PanelProductosController::class, 'storeCategoria'])->name('panel_productos_admin.categorias.store');
     Route::put('/panel_productos_admin/categorias/{categoriaProducto}', [PanelProductosController::class, 'updateCategoria'])->name('panel_productos_admin.categorias.update');
     Route::delete('/panel_productos_admin/categorias/{categoriaProducto}', [PanelProductosController::class, 'destroyCategoria'])->name('panel_productos_admin.categorias.destroy');
+    Route::get('/panel_pedidos_admin', [PanelPedidosController::class, 'index'])->name('panel_pedidos_admin');
+    Route::get('/panel_pedidos_admin/{pedido}', [PanelPedidosController::class, 'show'])->name('panel_pedidos_admin.show');
+    Route::patch('/panel_pedidos_admin/{pedido}/estado', [PanelPedidosController::class, 'cambiarEstado'])->name('panel_pedidos_admin.estado');
 });
