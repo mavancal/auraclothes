@@ -1,0 +1,144 @@
+erDiagram
+    provincias {
+        bigint id PK
+        varchar descripcion
+    }
+    localidades {
+        bigint id PK
+        varchar descripcion
+        bigint provincia_id FK
+    }
+    tipos_documento {
+        bigint id PK
+        varchar descripcion
+    }
+    tipos_persona {
+        bigint id PK
+        varchar descripcion
+    }
+    contactos {
+        bigint id PK
+        varchar nombre
+        varchar nombre2 "nullable"
+        varchar apellido
+        bigint tipo_documento_id FK "UK con numero_documento"
+        varchar numero_documento "UK con tipo_documento_id"
+        varchar cuit UK "nullable, CHECK 11 digitos"
+        date fecha_nacimiento "nullable"
+        varchar telefono "nullable"
+        varchar email_contacto
+        bigint tipo_persona_id FK
+    }
+    direcciones {
+        bigint id PK
+        varchar calle
+        varchar numero
+        varchar piso "nullable"
+        varchar departamento "nullable"
+        varchar cod_postal "nullable"
+        boolean es_principal "default false"
+        varchar referencia "nullable"
+        bigint localidad_id FK
+        bigint contacto_id FK
+    }
+    categorias_us {
+        bigint id PK
+        varchar nombre_categoria
+        varchar descripcion "nullable"
+    }
+    categoria_us_contacto {
+        bigint categoria_us_id PK, FK
+        bigint contacto_id PK, FK
+        timestamp fecha_asig "default now"
+    }
+    users {
+        bigint id PK
+        varchar name UK "nombre de usuario"
+        varchar email UK
+        timestamp email_verified_at "nullable"
+        varchar password "hasheada"
+        varchar remember_token "nullable"
+        timestamp ultimo_acceso "nullable"
+        boolean activo "default true"
+        bigint contacto_id FK, UK
+    }
+    roles {
+        bigint id PK
+        varchar nombre_rol
+        int nivel_permiso "100 admin, 50 empleado, 10 cliente"
+        varchar descripcion "nullable"
+    }
+    rol_user {
+        bigint user_id PK, FK
+        bigint rol_id PK, FK
+        timestamp fecha_asig "default now"
+    }
+    colecciones {
+        bigint id PK
+        varchar nombre_coleccion
+    }
+    categorias_producto {
+        bigint id PK
+        varchar nombre_categoria
+    }
+    productos {
+        bigint id PK
+        varchar sku UK
+        varchar nombre
+        text descripcion "nullable"
+        varchar imagen_url "nullable"
+        boolean activo "default true"
+        decimal precio "CHECK >= 0"
+        decimal precio_oferta "nullable, CHECK <= precio"
+        int stock "unsigned, default 0"
+        bigint coleccion_id FK "nullable, on delete set null"
+    }
+    categoria_producto_producto {
+        bigint producto_id PK, FK
+        bigint categoria_producto_id PK, FK
+    }
+    estados_pedido {
+        bigint id PK
+        varchar descripcion
+    }
+    metodos_pago {
+        bigint id PK
+        varchar metodo
+    }
+    pedidos {
+        bigint id PK
+        bigint user_id FK
+        bigint estado_pedido_id FK
+        datetime fecha_ped "default now"
+        decimal descuento "default 0, CHECK >= 0"
+        decimal costo_envio "default 0, CHECK >= 0"
+        bigint metodo_pago_id FK
+        bigint direccion_envio_id FK
+    }
+    detalle_pedidos {
+        bigint id PK
+        bigint pedido_id FK "on delete cascade"
+        bigint producto_id FK
+        int cantidad "CHECK > 0"
+        decimal precio_unitario "precio pagado, CHECK >= 0"
+    }
+
+    provincias ||--o{ localidades : "tiene"
+    localidades ||--o{ direcciones : "ubica"
+    tipos_documento ||--o{ contactos : "clasifica"
+    tipos_persona ||--o{ contactos : "clasifica"
+    contactos ||--o{ direcciones : "tiene"
+    contactos ||--o| users : "1 a 1"
+    contactos ||--o{ categoria_us_contacto : ""
+    categorias_us ||--o{ categoria_us_contacto : ""
+    users ||--o{ rol_user : ""
+    roles ||--o{ rol_user : ""
+    users ||--o{ pedidos : "realiza"
+    estados_pedido ||--o{ pedidos : "estado"
+    metodos_pago ||--o{ pedidos : "pago"
+    direcciones ||--o{ pedidos : "envio a"
+    pedidos ||--|{ detalle_pedidos : "contiene"
+    productos ||--o{ detalle_pedidos : "se vende en"
+    colecciones |o--o{ productos : "agrupa"
+    productos ||--o{ categoria_producto_producto : ""
+    categorias_producto ||--o{ categoria_producto_producto : ""

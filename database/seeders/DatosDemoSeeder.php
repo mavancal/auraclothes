@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Contacto;
-use App\Models\EstadoPedido;
 use App\Models\Localidad;
 use App\Models\MetodoPago;
 use App\Models\Producto;
@@ -13,6 +12,7 @@ use App\Models\TipoPersona;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use App\Services\PedidoService;
 
 class DatosDemoSeeder extends Seeder
 {
@@ -45,31 +45,20 @@ class DatosDemoSeeder extends Seeder
 
         $usuario->roles()->attach(Rol::where('nombre_rol', 'Cliente')->first()->id);
 
-        // Dos productos que ya cargó ProductosSeeder
-        $remera = Producto::where('sku', 'REM-001')->first();
-        $gorro = Producto::where('sku', 'HW-001')->first();
+        // Un pedido de ejemplo, creado con PedidoService:
+        // descuenta el stock y guarda el precio vigente, igual que una compra real
+        app(PedidoService::class)->crear(
+            $usuario,
+            [
+                ['producto_id' => Producto::where('sku', 'REM-001')->value('id'), 'cantidad' => 2],
+                ['producto_id' => Producto::where('sku', 'HW-001')->value('id'), 'cantidad' => 1],
+            ],
+            $direccion->id,
+            MetodoPago::where('metodo', 'Transferencia')->value('id'),
+            costoEnvio: 1500,
+        );
 
-        // Un pedido con dos líneas de detalle
-        $pedido = $usuario->pedidos()->create([
-            'estado_pedido_id' => EstadoPedido::where('descripcion', 'Pendiente')->first()->id,
-            'metodo_pago_id' => MetodoPago::where('metodo', 'Transferencia')->first()->id,
-            'direccion_envio_id' => $direccion->id,
-            'costo_envio' => 1500,
-        ]);
-
-        // precio_unitario guarda lo que se pagó: el de oferta si lo hay, si no el normal
-        $pedido->detalles()->create([
-            'producto_id' => $remera->id,
-            'cantidad' => 2,
-            'precio_unitario' => $remera->precio_oferta ?? $remera->precio,
-        ]);
-
-        $pedido->detalles()->create([
-            'producto_id' => $gorro->id,
-            'cantidad' => 1,
-            'precio_unitario' => $gorro->precio_oferta ?? $gorro->precio,
-        ]);
-                // Un administrador para probar el panel de productos
+        // Un administrador para probar el panel de productos
         $contactoAdmin = Contacto::create([
             'nombre' => 'Admin',
             'apellido' => 'Aura',

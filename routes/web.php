@@ -10,6 +10,8 @@ use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\MisPedidosController;
 use App\Http\Controllers\PanelPedidosController;
+use App\Http\Controllers\MisDireccionesController;
+use App\Http\Controllers\MiCuentaController;
 
 Route::view('/','inicio')->name('inicio');
 
@@ -26,6 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/mis-pedidos', [MisPedidosController::class, 'index'])->name('mis-pedidos');
     Route::get('/mis-pedidos/{pedido}', [MisPedidosController::class, 'show'])->name('mis-pedidos.show');
     Route::post('/mis-pedidos/{pedido}/cancelar', [MisPedidosController::class, 'cancelar'])->name('mis-pedidos.cancelar');
+    Route::get('/mis-direcciones', [MisDireccionesController::class, 'index'])->name('mis-direcciones');
+    Route::post('/mis-direcciones', [MisDireccionesController::class, 'store'])->name('mis-direcciones.store');
+    Route::patch('/mis-direcciones/{direccionId}/principal', [MisDireccionesController::class, 'marcarPrincipal'])->whereNumber('direccionId')->name('mis-direcciones.principal');
+    Route::get('/mi-cuenta', [MiCuentaController::class, 'show'])->name('mi-cuenta');
+    Route::patch('/mi-cuenta/datos', [MiCuentaController::class, 'actualizarDatos'])->name('mi-cuenta.datos');
+    Route::put('/mi-cuenta/password', [MiCuentaController::class, 'cambiarPassword'])->name('mi-cuenta.password');
 });
 
 Route::view('/nuevo','nuevo')->name('nuevo');
