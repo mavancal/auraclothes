@@ -118,7 +118,7 @@ El seeder crea estos usuarios (**solo para desarrollo**, no deben existir en un 
 | Cliente | `juanperez` | `juan@mail.com` | `12345678` | Comprar, ver y cancelar sus pedidos |
 | Administrador | `admin` | `admin@auraclothes.com` | `admin1234` | Todo lo anterior + panel de productos y de pedidos |
 
-Juan Pérez tiene una dirección en Posadas y un pedido de ejemplo.
+Juan Pérez tiene una dirección en Posadas y un pedido de ejemplo (creado con `PedidoService`, así que ya descontó stock).
 
 ## Base de datos
 
@@ -144,7 +144,7 @@ erDiagram
     productos }o--o{ categorias_producto : "categoria_producto_producto"
 ```
 
-El diagrama completo con todas las columnas está en el DER de draw.io del equipo.
+El diagrama completo con todas las columnas está en `docs/DER.png` (generado desde la base; su código Mermaid está en `docs/DER.mmd`). La estructura en SQL está en `docs/ecommerce_estructura.sql` y, con los datos de ejemplo, en `docs/ecommerce_con_datos.sql`.
 
 ### Tablas
 
@@ -193,8 +193,7 @@ Se ejecutan en este orden desde `DatabaseSeeder`:
 
 1. `CatalogosSeeder`: tipos de documento y de persona, estados de pedido, métodos de pago, roles, provincias, localidades de Misiones, colecciones y categorías.
 2. `ProductosSeeder`: los productos que se muestran en el frontend.
-3. `DatosDemoSeeder`: el cliente Juan Pérez (con dirección y un pedido de ejemplo) y el usuario administrador.
-
+3. `DatosDemoSeeder`: el cliente Juan Pérez (con dirección y un pedido de ejemplo creado con `PedidoService`) y el usuario administrador.
 
 ### Ejemplos de consultas
 
@@ -386,6 +385,14 @@ También son públicas las páginas `inicio`, `contacto`, `nuevo` y `quienes-som
 | GET | `/mis-pedidos` | `mis-pedidos` | Pedidos del usuario |
 | GET | `/mis-pedidos/{pedido}` | `mis-pedidos.show` | Detalle de un pedido propio |
 | POST | `/mis-pedidos/{pedido}/cancelar` | `mis-pedidos.cancelar` | Cancela un pedido propio **Pendiente** |
+| GET | `/mis-direcciones` | `mis-direcciones` | Direcciones del usuario y formulario para agregar |
+| POST | `/mis-direcciones` | `mis-direcciones.store` | Agrega una dirección (`es_principal` opcional) |
+| PATCH | `/mis-direcciones/{direccionId}/principal` | `mis-direcciones.principal` | Marca una dirección propia como principal |
+| GET | `/mi-cuenta` | `mi-cuenta` | Datos personales del usuario |
+| PATCH | `/mi-cuenta/datos` | `mi-cuenta.datos` | Edita `nombre2`, `telefono` y `email_contacto` |
+| PUT | `/mi-cuenta/password` | `mi-cuenta.password` | Cambia la contraseña (`password_actual`, `password`, `password_confirmation`) |
+
+Ojo: `cuenta` es el **login** y `mi-cuenta` es la página de datos del usuario.
 
 Si un visitante entra a una de estas páginas, se lo manda a `/cuenta` y, después de iniciar sesión, vuelve a la página que quería ver.
 
@@ -446,6 +453,9 @@ En los controladores se usa `Gate::authorize('view', $pedido)`, y en las vistas 
   | `RegistroRequest` | Registro (limpia el CUIT antes de validar y controla que la localidad sea de la provincia elegida) |
   | `LoginRequest` | Inicio de sesión |
   | `CheckoutRequest` | Confirmar compra |
+  | `DireccionRequest` | Agregar una dirección |
+  | `DatosPersonalesRequest` | Editar los datos personales (solo `nombre2`, `telefono`, `email_contacto`: nombre, apellido y documento no se editan) |
+  | `CambiarPasswordRequest` | Cambiar la contraseña (pide la actual con la regla `current_password`) |
 
   En el controlador se usan tipando el parámetro: `public function store(RegistroRequest $request)` y `$request->validated()`.
 - Las acciones de uno o dos campos (cantidad del carrito, estado del pedido) validan con `$request->validate()` en el controlador.
@@ -463,10 +473,12 @@ Qué recibe cada vista desde su controlador y qué tiene que enviar cada formula
 | `checkout` | `$items`, `$subtotal`, `$direcciones` (la principal primero), `$metodosPago` | POST `route('checkout.confirmar')` con `direccion_id` y `metodo_pago_id`. Error general en `@error('checkout')` |
 | `mis-pedidos` | `$pedidos` (paginado) | Enlace a `route('mis-pedidos.show', $pedido)` |
 | `mis-pedidos-detalle` | `$pedido` (con `detalles.producto`, `estadoPedido`, `metodoPago`, `direccionEnvio.localidad`) | `@can('cancelar', $pedido)` → POST `route('mis-pedidos.cancelar', $pedido)` |
+| `mis-direcciones` | `$direcciones` (con `localidad.provincia`, la principal primero), `$provincias`, `$localidades` | POST `route('mis-direcciones.store')` (mismos campos de dirección que el registro + checkbox `es_principal`); PATCH `route('mis-direcciones.principal', $direccion->id)` en las que no son principales. Error general en `@error('direccion')` |
+| `mi-cuenta` | `$user`, `$contacto` (con `tipoDocumento` y `tipoPersona`) | PATCH `route('mi-cuenta.datos')` con `nombre2`, `telefono`, `email_contacto`; PUT `route('mi-cuenta.password')` con `password_actual`, `password`, `password_confirmation` |
 | `vistas_admin/panel_pedidos_admin` | `$pedidos` (paginado), `$estados`, `$filtros` | Filtros GET `estado_pedido_id` y `q`; enlace a `route('panel_pedidos_admin.show', $pedido)` |
 | `vistas_admin/panel_pedido_detalle` | `$pedido`, `$estadosSiguientes` | Un formulario PATCH `route('panel_pedidos_admin.estado', $pedido)` por cada estado, con `<input type="hidden" name="estado">` |
 
-**Mensajes que vuelven después de una acción:** el éxito llega en `session('success')` y los errores en `$errors` (`@error('campo')`). Claves de error generales: `registro`, `carrito`, `checkout`, `pedido`, `estado`. Para no perder lo que escribió el usuario cuando hay un error, usar `value="{{ old('campo') }}"`.
+**Mensajes que vuelven después de una acción:** el éxito llega en `session('success')` y los errores en `$errors` (`@error('campo')`). Claves de error generales: `registro`, `carrito`, `checkout`, `pedido`, `estado`, `direccion`. Para no perder lo que escribió el usuario cuando hay un error, usar `value="{{ old('campo') }}"`.
 
 **Datos útiles en cualquier vista:** `@auth ... @endauth` / `@guest ... @endguest`, `auth()->user()->name`, y `auth()->user()?->tieneNivel(50)` para mostrar el acceso al panel solo al personal.
 
@@ -483,7 +495,8 @@ php artisan test --filter=PedidoServiceTest # solo un archivo
 |---|---|
 | `PedidoServiceTest` | Creación con precio de oferta, falta de stock sin dejar datos a medias, dirección ajena, productos repetidos, cancelación y transiciones |
 | `RegistroServiceTest` / `RegistroControllerTest` | Alta completa, CUIT, duplicados, localidad de la provincia, mensajes en español |
-| `DireccionServiceTest` | Una sola dirección principal, dirección ajena |
+| `DireccionServiceTest` / `MisDireccionesTest` | Una sola dirección principal, dirección ajena, agregar desde la página |
+| `MiCuentaTest` | Editar solo los datos permitidos, cambio de contraseña |
 | `CatalogoServiceTest` | Búsqueda, filtros, orden por precio final, paginación y la página `/productos` |
 | `CarritoServiceTest` / `CarritoControllerTest` | Agregar, stock, productos dados de baja, conversión en pedido, rutas del carrito |
 | `CheckoutTest` | Compra completa, carrito vacío, dirección ajena, stock que se agotó mientras tanto |
@@ -562,12 +575,14 @@ Las *factories* (`database/factories`) fabrican datos de prueba: `Producto::fact
 - Carrito en sesión y checkout (el carrito se convierte en pedido).
 - Inicio y cierre de sesión, permisos por rol (middleware `nivel`) y `PedidoPolicy`.
 - "Mis pedidos" para clientes y panel de pedidos para el personal.
+- "Mi cuenta": direcciones (agregar y elegir la principal), datos personales y cambio de contraseña.
 - Validaciones con Form Requests y aplicación en español.
-- 77 tests automáticos propios.
+- 89 tests automáticos propios.
 
 **Pendiente**
 
-- Frontend: conectar el login (`cuenta`), el cierre de sesión, `productos.blade.php` con los datos reales, y crear las vistas `carrito`, `checkout`, `mis-pedidos`, `mis-pedidos-detalle`, `panel_pedidos_admin` y `panel_pedido_detalle` (ver [Guía para conectar las vistas](#guía-para-conectar-las-vistas)).
+- Frontend: conectar el login (`cuenta`), el cierre de sesión, `productos.blade.php` con los datos reales, y crear las vistas `carrito`, `checkout`, `mis-pedidos`, `mis-pedidos-detalle`, `mis-direcciones`, `mi-cuenta`, `panel_pedidos_admin` y `panel_pedido_detalle` (ver [Guía para conectar las vistas](#guía-para-conectar-las-vistas)).
 - Panel de productos: campo de stock al crear y editar.
 - Definir el costo de envío (hoy es 0).
-- Documentación final: DER actualizado y dump de la base.
+- Decidir si se pueden borrar o desactivar direcciones (las que se usaron en pedidos no se pueden borrar).
+- Actualizar el DER de draw.io (ya están `docs/DER.png`, `docs/DER.mmd` y los dumps en `docs/`).
