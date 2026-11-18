@@ -195,7 +195,6 @@ Se ejecutan en este orden desde `DatabaseSeeder`:
 2. `ProductosSeeder`: los productos que se muestran en el frontend.
 3. `DatosDemoSeeder`: el cliente Juan Pérez (con dirección y un pedido de ejemplo) y el usuario administrador.
 
-> El pedido de ejemplo de `DatosDemoSeeder` se crea a mano y **no descuenta stock**. No cancelarlo para probar la devolución de stock; para eso crear un pedido nuevo con `PedidoService`.
 
 ### Ejemplos de consultas
 
