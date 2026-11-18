@@ -497,6 +497,7 @@ php artisan test --filter=PedidoServiceTest # solo un archivo
 | `RegistroServiceTest` / `RegistroControllerTest` | Alta completa, CUIT, duplicados, localidad de la provincia, mensajes en español |
 | `DireccionServiceTest` / `MisDireccionesTest` | Una sola dirección principal, dirección ajena, agregar desde la página |
 | `MiCuentaTest` | Editar solo los datos permitidos, cambio de contraseña |
+| `PanelProductosStockTest` | Stock al crear y editar productos desde el panel |
 | `CatalogoServiceTest` | Búsqueda, filtros, orden por precio final, paginación y la página `/productos` |
 | `CarritoServiceTest` / `CarritoControllerTest` | Agregar, stock, productos dados de baja, conversión en pedido, rutas del carrito |
 | `CheckoutTest` | Compra completa, carrito vacío, dirección ajena, stock que se agotó mientras tanto |
@@ -577,12 +578,13 @@ Las *factories* (`database/factories`) fabrican datos de prueba: `Producto::fact
 - "Mis pedidos" para clientes y panel de pedidos para el personal.
 - "Mi cuenta": direcciones (agregar y elegir la principal), datos personales y cambio de contraseña.
 - Validaciones con Form Requests y aplicación en español.
-- 89 tests automáticos propios.
+- Stock de los productos desde el panel (backend).
+- 94 tests automáticos propios.
 
 **Pendiente**
 
 - Frontend: conectar el login (`cuenta`), el cierre de sesión, `productos.blade.php` con los datos reales, y crear las vistas `carrito`, `checkout`, `mis-pedidos`, `mis-pedidos-detalle`, `mis-direcciones`, `mi-cuenta`, `panel_pedidos_admin` y `panel_pedido_detalle` (ver [Guía para conectar las vistas](#guía-para-conectar-las-vistas)).
-- Panel de productos: campo de stock al crear y editar.
+- Panel de productos: agregar el campo `stock` en los formularios de crear y editar (el backend ya lo acepta).
 - Definir el costo de envío (hoy es 0).
 - Decidir si se pueden borrar o desactivar direcciones (las que se usaron en pedidos no se pueden borrar).
 - Actualizar el DER de draw.io (ya están `docs/DER.png`, `docs/DER.mmd` y los dumps en `docs/`).

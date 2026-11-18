@@ -28,6 +28,7 @@ class PanelProductosController extends Controller
             'imagen_url' => ['nullable', 'string', 'max:255'],
             'precio' => ['required', 'numeric', 'min:0'],
             'precio_oferta' => ['nullable', 'numeric', 'min:0', 'lte:precio'],
+            'stock' => ['nullable', 'integer', 'min:0', 'max:100000'],
             'categoria_id' => ['required', 'exists:categorias_producto,id'],
             'coleccion_id' => ['nullable', 'exists:colecciones,id'],
             'activo' => ['nullable', 'boolean'],
@@ -41,6 +42,7 @@ class PanelProductosController extends Controller
             'activo' => $request->boolean('activo'),
             'precio' => $validated['precio'],
             'precio_oferta' => $validated['precio_oferta'] ?? null,
+            'stock' => $validated['stock'] ?? 0,
             'coleccion_id' => $validated['coleccion_id'] ?? null,
         ]);
 
@@ -89,6 +91,7 @@ class PanelProductosController extends Controller
             'imagen_url' => ['nullable', 'string', 'max:255'],
             'precio' => ['required', 'numeric', 'min:0'],
             'precio_oferta' => ['nullable', 'numeric', 'min:0', 'lte:precio'],
+            'stock' => ['nullable', 'integer', 'min:0', 'max:100000'],
             'categoria_id' => ['required', 'exists:categorias_producto,id'],
             'coleccion_id' => ['nullable', 'exists:colecciones,id'],
             'activo' => ['nullable', 'boolean'],
@@ -104,6 +107,11 @@ class PanelProductosController extends Controller
             'precio_oferta' => $validated['precio_oferta'] ?? null,
             'coleccion_id' => $validated['coleccion_id'] ?? null,
         ]);
+
+        // Si el formulario manda el stock, se actualiza; si no lo manda, queda como estaba.
+        if ($request->filled('stock')) {
+            $producto->update(['stock'=> $validated['stock']]);
+        }
 
         $producto->categorias()->sync([$validated['categoria_id']]);
 
