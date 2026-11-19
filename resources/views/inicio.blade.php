@@ -12,7 +12,11 @@
 <body>
 
     @include('partials.header')
-
+    @if (session('success'))
+    <div style="max-width:1200px;margin:1rem auto;padding:1rem;background:#e6f4ea;color:#1e4620;border-radius:4px;">
+      {{ session('success') }}
+    </div>
+    @endif
 
 <main id="contenido">
 
