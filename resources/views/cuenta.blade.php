@@ -13,50 +13,7 @@
   </head>
   <body>
 
-    <header class="topbar">
-      <div class="topbar__inner">
-        <button class="icon-btn icon-btn--search" type="button" aria-label="Buscar productos">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <span class="icon-btn__label">Buscar</span>
-        </button>
-
-
-        <a class="logo" href="index.html" aria-label="AURA CLOTHES, ir al inicio">
-          <span class="logo__mark">AC</span>
-          <span class="logo__word">AURA CLOTHES</span>
-        </a>
-
-        <div class="topbar__actions">
-
-
-          <button class="icon-btn" type="button" aria-label="Mi cuenta">
-            <a href="{{ route('cuenta') }}">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path></svg>
-                <span class="icon-btn__label">Cuenta</span>
-            </a>
-          </button>
-
-
-          <button class="icon-btn" type="button" aria-label="Ver carrito, 3 productos">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.5 10.5a2 2 0 0 1-2 1.5H7.5a2 2 0 0 1-2-1.5L4 6z"></path><path d="M8 6V5a4 4 0 0 1 8 0v1"></path></svg>
-            <span class="icon-btn__label">Carrito</span>
-            <span class="icon-btn__badge">3</span>
-          </button>
-        </div>
-      </div>
-    
-
-      <!-- ===== NAVBAR ===== -->
-      <nav class="mainnav" aria-label="Navegación principal">
-        <ul class="mainnav__list">
-          <li><a class="mainnav__link" href="{{ route('inicio') }}">Inicio</a></li>
-          <li><a class="mainnav__link" href="{{ route('nuevo') }}">Nuevo</a></li>
-          <li><a class="mainnav__link is-active" href="{{ route('productos') }}">Productos</a></li>
-          <li><a class="mainnav__link" href="{{ route('contacto') }}">Contacto</a></li>
-          <li><a class="mainnav__link" href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
-        </ul>
-      </nav>
-    </header>
+    @include('partials.header')
 
     <main class="account-main">
       <section class="login-panel" aria-labelledby="login-title">
@@ -66,10 +23,21 @@
           <p>Ingresá a tu cuenta para consultar tus pedidos y guardar tus prendas favoritas.</p>
         </div>
 
-        <form class="login-form" action="#" method="post">
+        <form class="login-form" action="{{ route('sesion.iniciar') }}" method="post">
+          @csrf
           <div class="form-field">
             <label for="login-email">Correo electrónico</label>
-            <input type="email" id="login-email" name="email" placeholder="tu@correo.com" autocomplete="email" required />
+            <input type="email" id="login-email" name="email" placeholder="tu@correo.com" autocomplete="email" value="{{ old('email') }}" required />
+              @error('email')
+              <span class="form-error">{{ $message }}</span>
+              @enderror
+          </div>
+
+          <div class="form-field">
+            <label>
+              <input type="checkbox" name="recordar" value="1" {{ old('recordar') ? 'checked' : '' }} />
+              Recordarme
+            </label>
           </div>
 
           <div class="form-field">
@@ -81,9 +49,8 @@
 
           <div class="login-actions">
             <button class="btn btn--primary" type="submit">Iniciar sesión</button>
-            <a href="{{ route('registro') }}">
-              <button class="btn btn--secondary" type="button">Registrarse</button>
-            </a>
+              <a class="btn btn--secondary" href="{{ route('registro') }}">Registrarse</a>
+            
           </div>
         </form>
       </section>
