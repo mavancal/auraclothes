@@ -21,22 +21,26 @@ class SesionController extends Controller
      * Procesa el formulario de inicio de sesión.
      */
     public function store(LoginRequest $request, SesionService $sesion)
-    {
-        $datos = $request->validated();
+{
+    $datos = $request->validated();
 
-        try {
-            $sesion->iniciar($datos['email'], $datos['password'], $request->boolean('recordar'));
-        } catch (SesionInvalidaException $e) {
-            return back()
-                ->withErrors(['email' => $e->getMessage()])
-                ->onlyInput('email');
-        }
-
-        // Nuevo id de sesión al entrar (evita el robo de sesión)
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('inicio'));
+    try {
+        $sesion->iniciar($datos['email'], $datos['password'], $request->boolean('recordar'));
+    } catch (SesionInvalidaException $e) {
+        return back()
+            ->withErrors(['email' => $e->getMessage()])
+            ->onlyInput('email');
     }
+
+    $request->session()->regenerate();
+
+    $user = auth()->user();
+    if ($user && $user->tieneNivel(50)) {
+        return redirect()->route('panel_productos_admin');
+    }
+
+    return redirect()->intended(route('inicio'));
+}
 
     /**
      * Cierra la sesión.

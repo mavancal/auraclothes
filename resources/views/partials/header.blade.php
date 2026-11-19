@@ -19,6 +19,12 @@
       @endguest
 
       @auth
+        @if (auth()->user()?->tieneNivel(50))
+          <a class="icon-btn" href="{{ route('panel_productos_admin') }}" aria-label="Panel de administración">
+            <span class="icon-btn__label">Panel</span>
+          </a>
+        @endif
+
         <span class="icon-btn__label">{{ auth()->user()->name }}</span>
         <form method="POST" action="{{ route('sesion.cerrar') }}" style="display:inline;">
           @csrf

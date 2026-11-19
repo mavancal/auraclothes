@@ -13,44 +13,107 @@
 
     @include('partials.header')
 
-    <!-- ===== CONTENIDO: VISTA PRODUCTOS ===== -->
     <main id="contenido">
       <div id="page-productos" class="page is-active">
         <div class="section">
           <h1 style="font-size:2.2rem;margin:0 0 2rem">Todos los productos</h1>
-          <div class="toolbar">
-            <div class="filter-group" id="productos-filters">
-              <button class="filter-btn is-active" data-filter="Todo">Todo</button>
-              <button class="filter-btn" data-filter="Remeras">Remeras</button>
-              <button class="filter-btn" data-filter="Pantalones">Pantalones</button>
-              <button class="filter-btn" data-filter="Buzos">Buzos</button>
-              <button class="filter-btn" data-filter="HeadWear">HeadWear</button>
-              <button class="filter-btn" data-filter="Accesorios">Accesorios</button>
-              <button class="filter-btn" data-filter="Mochilas">Mochilas</button>
+
+          {{-- Filtros por GET --}}
+          <form method="GET" action="{{ route('productos') }}" class="toolbar">
+            <div class="filter-group">
+              <input type="text" name="q" value="{{ $filtros['q'] }}" placeholder="Buscar..." class="sort-select" />
             </div>
             <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
-              <select class="sort-select" id="productos-coleccion" aria-label="Filtrar por colección">
-                <option value="Todas">Todas las colecciones</option>
-                <option value="Otoño 2026">Otoño 2026</option>
-                <option value="Invierno 2025">Invierno 2025</option>
-                <option value="Verano 2025">Verano 2025</option>
-                <option value="Básicos">Básicos</option>
+              <select class="sort-select" name="coleccion_id">
+                <option value="">Todas las colecciones</option>
+                @foreach ($colecciones as $coleccion)
+                  <option value="{{ $coleccion->id }}" {{ $filtros['coleccion_id'] == $coleccion->id ? 'selected' : '' }}>
+                    {{ $coleccion->nombre_coleccion }}
+                  </option>
+                @endforeach
               </select>
-              <select class="sort-select" id="productos-sort" aria-label="Ordenar productos">
-                <option value="default">Destacados</option>
-                <option value="price-asc">Precio: menor a mayor</option>
-                <option value="price-desc">Precio: mayor a menor</option>
-                <option value="name">Nombre A–Z</option>
+
+              <select class="sort-select" name="categoria_id">
+                <option value="">Todas las categorías</option>
+                @foreach ($categorias as $categoria)
+                  <option value="{{ $categoria->id }}" {{ $filtros['categoria_id'] == $categoria->id ? 'selected' : '' }}>
+                    {{ $categoria->nombre_categoria }}
+                  </option>
+                @endforeach
               </select>
+
+              <select class="sort-select" name="orden">
+                <option value="" {{ $filtros['orden'] === '' ? 'selected' : '' }}>Destacados</option>
+                <option value="nuevos" {{ $filtros['orden'] === 'nuevos' ? 'selected' : '' }}>Nuevos</option>
+                <option value="precio_asc" {{ $filtros['orden'] === 'precio_asc' ? 'selected' : '' }}>Precio: menor a mayor</option>
+                <option value="precio_desc" {{ $filtros['orden'] === 'precio_desc' ? 'selected' : '' }}>Precio: mayor a menor</option>
+                <option value="nombre" {{ $filtros['orden'] === 'nombre' ? 'selected' : '' }}>Nombre A–Z</option>
+              </select>
+
+              <label style="font-size:0.85rem;display:flex;align-items:center;gap:0.3rem">
+                <input type="checkbox" name="en_oferta" value="1" {{ $filtros['en_oferta'] ? 'checked' : '' }}>
+                En oferta
+              </label>
+              <label style="font-size:0.85rem;display:flex;align-items:center;gap:0.3rem">
+                <input type="checkbox" name="con_stock" value="1" {{ $filtros['con_stock'] ? 'checked' : '' }}>
+                Con stock
+              </label>
+
+              <button type="submit" class="filter-btn is-active">Filtrar</button>
             </div>
-          </div>
-          <p class="count-label" id="productos-count"></p>
-          <ul class="product-grid" id="productos-grid"></ul>
+          </form>
+
+          <p class="count-label">{{ $productos->total() }} producto(s)</p>
+
+          @if ($productos->isEmpty())
+            <p class="empty-msg">No se encontraron productos.</p>
+          @else
+            <ul class="product-grid" id="productos-grid">
+              @foreach ($productos as $producto)
+                @php
+                  $mediaClasses = ['product-card__media--sand','product-card__media--brand','product-card__media--ink','product-card__media--accent'];
+                  $mediaClass = $mediaClasses[$loop->index % 4];
+                @endphp
+                <li class="product-card">
+                  <div class="product-card__media {{ $mediaClass }}">
+                    @if ($producto->imagen_url)
+                      <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                    @else
+                      @if ($producto->coleccion)
+                        <span class="placeholder-tag">{{ $producto->coleccion->nombre_coleccion }}</span>
+                      @endif
+                    @endif
+                    @if ($producto->porcentaje_descuento)
+                      <span class="tag-discount">-{{ $producto->porcentaje_descuento }}%</span>
+                    @endif
+                  </div>
+                  <p class="product-card__name">{{ $producto->nombre }}</p>
+                  <p class="product-card__price">
+                    @if ($producto->precio_oferta)
+                      <span class="price-old">${{ number_format($producto->precio, 0, ',', '.') }}</span>
+                    @endif
+                    ${{ number_format($producto->precio_final, 0, ',', '.') }}
+                  </p>
+                  <form method="POST" action="{{ route('carrito.agregar') }}" style="margin-top:0.5rem;display:flex;gap:0.4rem;align-items:center">
+                    @csrf
+                    <input type="hidden" name="producto_id" value="{{ $producto->id }}">
+                    <input type="number" name="cantidad" value="1" min="1" max="{{ $producto->stock }}" style="width:3rem;padding:0.3rem" {{ $producto->stock < 1 ? 'disabled' : '' }}>
+                    <button type="submit" class="filter-btn" {{ $producto->stock < 1 ? 'disabled' : '' }}>
+                      {{ $producto->stock < 1 ? 'Sin stock' : 'Agregar al carrito' }}
+                    </button>
+                  </form>
+                </li>
+              @endforeach
+            </ul>
+
+            <div style="margin-top:2rem">
+              {{ $productos->links() }}
+            </div>
+          @endif
         </div>
       </div>
     </main>
 
-    <!-- ===== FOOTER ===== -->
     <footer class="footer">
       <div class="footer__grid">
         <div>
@@ -60,9 +123,9 @@
         <div>
           <h3 class="footer__heading">Navegación</h3>
           <ul class="footer__list">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="nuevo.html">Nuevo</a></li>
-            <li><a href="productos.html">Productos</a></li>
+            <li><a href="{{ route('inicio') }}">Inicio</a></li>
+            <li><a href="{{ route('nuevo') }}">Nuevo</a></li>
+            <li><a href="{{ route('productos') }}">Productos</a></li>
           </ul>
         </div>
         <div>
@@ -70,8 +133,8 @@
           <ul class="footer__list">
             <li><a href="#">Envíos y entregas</a></li>
             <li><a href="#">Cambios y devoluciones</a></li>
-            <li><a href="contacto.html">Contacto</a></li>
-            <li><a href="quienes-somos.html">Quiénes somos</a></li>
+            <li><a href="{{ route('contacto') }}">Contacto</a></li>
+            <li><a href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
           </ul>
         </div>
         <div>
@@ -92,7 +155,5 @@
         </ul>
       </div>
     </footer>
-
-    <script src="/js/productos.js"></script>
   </body>
 </html>
