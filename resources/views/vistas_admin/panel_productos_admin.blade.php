@@ -27,6 +27,7 @@
     <!-- ===== NAVBAR ADMIN ===== -->
     <nav class="mainnav" aria-label="Navegación de administración">
       <ul class="mainnav__list">
+        <li><a class="mainnav__link" href="{{ route('inicio') }}">Inicio</a></li>
         <li><a class="mainnav__link is-active" href="#">Productos</a></li>
         <li><a class="mainnav__link" href="#">Pedidos</a></li>
         <li><a class="mainnav__link" href="#">Usuarios</a></li>
