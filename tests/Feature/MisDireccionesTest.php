@@ -10,6 +10,9 @@ use App\Services\DireccionService;
 use Database\Seeders\CatalogosSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\MetodoPago;
+use App\Models\Producto;
+use App\Services\PedidoService;
 
 class MisDireccionesTest extends TestCase
 {
@@ -122,5 +125,67 @@ class MisDireccionesTest extends TestCase
 
         $this->assertSame('Av. Mitre', $this->callePrincipal());
         $this->assertTrue($ajena->fresh()->es_principal); // la del otro tampoco cambió
+    }
+    public function test_la_pagina_de_direcciones_carga(): void
+    {
+        $this->actingAs($this->user)
+            ->get(route('mis-direcciones'))
+            ->assertOk()
+            ->assertSee('Av. Mitre');
+    }
+
+    public function test_editar_corrige_una_direccion_sin_pedidos(): void
+    {
+        $this->actingAs($this->user)
+            ->get(route('mis-direcciones.edit', $this->casa->id))
+            ->assertOk();
+
+        $this->actingAs($this->user)
+            ->from(route('mis-direcciones.edit', $this->casa->id))
+            ->put(route('mis-direcciones.update', $this->casa->id), $this->formulario(['calle' => 'Av. Mitre Corregida']))
+            ->assertRedirect(route('mis-direcciones'))
+            ->assertSessionHas('success');
+
+        $casa = $this->casa->fresh();
+        $this->assertSame('Av. Mitre Corregida', $casa->calle);
+        $this->assertTrue($casa->es_principal); // editar no cambia cuál es la principal
+    }
+
+    public function test_no_se_puede_editar_una_direccion_usada_en_un_pedido(): void
+    {
+        $producto = Producto::factory()->create(['stock' => 5]);
+        app(PedidoService::class)->crear(
+            $this->user,
+            [['producto_id' => $producto->id, 'cantidad' => 1]],
+            $this->casa->id,
+            MetodoPago::query()->value('id'),
+        );
+
+        $this->actingAs($this->user)
+            ->get(route('mis-direcciones.edit', $this->casa->id))
+            ->assertRedirect(route('mis-direcciones'))
+            ->assertSessionHasErrors(['direccion' => DireccionService::MENSAJE_USADA]);
+
+        $this->actingAs($this->user)
+            ->put(route('mis-direcciones.update', $this->casa->id), $this->formulario(['calle' => 'Otra']))
+            ->assertSessionHasErrors('direccion');
+
+        $this->assertSame('Av. Mitre', $this->casa->fresh()->calle);
+    }
+
+    public function test_no_se_puede_editar_la_direccion_de_otro(): void
+    {
+        $otro = User::factory()->create();
+        $ajena = app(DireccionService::class)->agregar($otro, [
+            'calle'        => 'Ajena',
+            'numero'       => '1',
+            'localidad_id' => Localidad::query()->value('id'),
+        ]);
+
+        $this->actingAs($this->user)
+            ->put(route('mis-direcciones.update', $ajena->id), $this->formulario(['calle' => 'Robada']))
+            ->assertSessionHasErrors(['direccion' => 'La dirección no pertenece al usuario.']);
+
+        $this->assertSame('Ajena', $ajena->fresh()->calle);
     }
 }

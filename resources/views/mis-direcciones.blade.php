@@ -36,15 +36,23 @@
                   <p class="product-card__name" style="margin:0">
                     {{ $direccion->calle }} {{ $direccion->numero }}{{ $direccion->piso ? ', Piso '.$direccion->piso : '' }}{{ $direccion->departamento ? ' Dpto '.$direccion->departamento : '' }}
                   </p>
-                  @if ($direccion->es_principal)
-                    <span style="background:#e6f4ea;color:#1e4620;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem">Principal</span>
-                  @else
-                    <form method="POST" action="{{ route('mis-direcciones.principal', $direccion->id) }}">
-                      @csrf
-                      @method('PATCH')
-                      <button type="submit" class="filter-btn">Marcar como principal</button>
-                    </form>
-                  @endif
+                  <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">
+                    @if ($direccion->es_principal)
+                      <span style="background:#e6f4ea;color:#1e4620;padding:0.2rem 0.6rem;border-radius:4px;font-size:0.8rem">Principal</span>
+                    @else
+                      <form method="POST" action="{{ route('mis-direcciones.principal', $direccion->id) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="filter-btn">Marcar como principal</button>
+                      </form>
+                    @endif
+
+                    @if ($direccion->pedidos_exists)
+                      <span style="font-size:0.8rem;color:#888" title="Ya se usó en un pedido, por eso no se puede modificar">Usada en pedidos</span>
+                    @else
+                      <a href="{{ route('mis-direcciones.edit', $direccion->id) }}" class="filter-btn">Editar</a>
+                    @endif
+                  </div>
                 </div>
                 <p style="font-size:0.85rem;margin:0.3rem 0;color:#666">
                   {{ $direccion->localidad->descripcion ?? '' }}{{ $direccion->localidad?->provincia ? ', '.$direccion->localidad->provincia->descripcion : '' }}

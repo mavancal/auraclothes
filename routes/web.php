@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/mis-direcciones', [MisDireccionesController::class, 'index'])->name('mis-direcciones');
     Route::post('/mis-direcciones', [MisDireccionesController::class, 'store'])->name('mis-direcciones.store');
     Route::patch('/mis-direcciones/{direccionId}/principal', [MisDireccionesController::class, 'marcarPrincipal'])->whereNumber('direccionId')->name('mis-direcciones.principal');
+    Route::get('/mis-direcciones/{direccionId}/editar', [MisDireccionesController::class, 'edit'])->whereNumber('direccionId')->name('mis-direcciones.edit');
+    Route::put('/mis-direcciones/{direccionId}', [MisDireccionesController::class, 'update'])->whereNumber('direccionId')->name('mis-direcciones.update');
     Route::get('/mi-cuenta', [MiCuentaController::class, 'show'])->name('mi-cuenta');
     Route::patch('/mi-cuenta/datos', [MiCuentaController::class, 'actualizarDatos'])->name('mi-cuenta.datos');
     Route::put('/mi-cuenta/password', [MiCuentaController::class, 'cambiarPassword'])->name('mi-cuenta.password');
