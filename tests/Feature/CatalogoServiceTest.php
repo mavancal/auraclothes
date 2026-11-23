@@ -121,4 +121,13 @@ class CatalogoServiceTest extends TestCase
             ->assertOk()
             ->assertViewHas('productos', fn ($productos) => $productos->pluck('nombre')->all() === ['Con oferta']);
     }
+
+    public function test_la_pagina_de_productos_muestra_la_imagen(): void
+    {
+        Producto::factory()->create(['imagen_url' => '/img/productos/test.jpg']);
+
+        $this->get(route('productos'))
+            ->assertOk()
+            ->assertSee('src="' . asset('/img/productos/test.jpg') . '"', false);
+    }
 }

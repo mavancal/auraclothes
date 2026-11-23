@@ -64,6 +64,7 @@ class ProductosSeeder extends Seeder
                 'precio' => $dato['precio'],
                 'precio_oferta' => $dato['precio_oferta'],
                 'stock' => $dato['stock'],
+                'imagen_url' => '/img/productos/' . strtolower($dato['sku']) . '.jpg',
             ]);
 
             $producto->categorias()->attach($categoria->id);

@@ -15,8 +15,9 @@ use App\Http\Controllers\MiCuentaController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\PanelMensajesController;
+use App\Http\Controllers\PaginaController;
 
-Route::view('/','inicio')->name('inicio');
+Route::get('/', [PaginaController::class, 'inicio'])->name('inicio');
 
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos');
 Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
@@ -41,7 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/mi-cuenta/password', [MiCuentaController::class, 'cambiarPassword'])->name('mi-cuenta.password');
 });
 
-Route::view('/nuevo','nuevo')->name('nuevo');
+Route::get('/nuevo', [PaginaController::class, 'nuevo'])->name('nuevo');
 
 Route::view('/contacto','contacto')->name('contacto');
 Route::post('/contacto', [ContactoController::class, 'store'])->middleware('throttle:5,1')->name('contacto.enviar');

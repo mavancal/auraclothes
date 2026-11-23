@@ -29,7 +29,7 @@
       <p class="feature__kicker">Nueva colección</p>
       <h1 class="feature__title">Prendas con textura, hechas para durar</h1>
       <p class="feature__body">Prendas de lana, algodón y pana, pensadas para días que empiezan fríos y terminan templados. Confección en talleres pequeños, sin apuro y sin fibras de más.</p>
-      <a class="link-arrow" href="#">Ver la colección completa</a>
+      <a class="link-arrow" href="{{ route('productos') }}">Ver la colección completa</a>
     </div>
   </section>
 
@@ -37,46 +37,41 @@
   <section class="section" aria-labelledby="tit-ofertas">
     <div class="section__head">
       <h2 class="section__title" id="tit-ofertas">Ofertas de la semana</h2>
-      <a class="section__link" href="#">Ver todas las ofertas</a>
+      <a class="section__link" href="{{ route('productos', ['en_oferta' => 1]) }}">Ver todas las ofertas</a>
     </div>
 
-    <ul class="product-grid">
-      <li class="product-card">
-        <div class="product-card__media product-card__media--sand">
-          <span class="placeholder-tag">Remeras</span>
-          <span class="tag-discount">-20%</span>
-        </div>
-        <p class="product-card__name">Remera Oversize AURA - Overflow</p>
-        <p class="product-card__price"><span class="price-old">$28.900</span> $23.100</p>
-      </li>
-
-      <li class="product-card">
-        <div class="product-card__media product-card__media--brand">
-          <span class="placeholder-tag">Pantalones</span>
-          <span class="tag-discount">-20%</span>
-        </div>
-        <p class="product-card__name">Pantalón Baggy AURA - Class Division</p>
-        <p class="product-card__price"><span class="price-old">$42.000</span> $35.700</p>
-      </li>
-
-      <li class="product-card">
-        <div class="product-card__media product-card__media--ink">
-          <span class="placeholder-tag">HeadWear</span>
-          <span class="tag-discount">-30%</span>
-        </div>
-        <p class="product-card__name">Gorro de lana Y2K - Century War</p>
-        <p class="product-card__price"><span class="price-old">$61.500</span> $43.050</p>
-      </li>
-
-      <li class="product-card">
-        <div class="product-card__media product-card__media--accent">
-          <span class="placeholder-tag">Remeras</span>
-          <span class="tag-discount">-10%</span>
-        </div>
-        <p class="product-card__name">Remera Oversize TripleZ - Colorful</p>
-        <p class="product-card__price"><span class="price-old">$19.800</span> $17.820</p>
-      </li>
-    </ul>
+    @if ($productos->isEmpty())
+      <p>Pronto vas a ver nuestros productos acá.</p>
+    @else
+      <ul class="product-grid">
+        @foreach ($productos as $producto)
+          @php
+            $mediaClasses = ['product-card__media--sand','product-card__media--brand','product-card__media--ink','product-card__media--accent'];
+          @endphp
+          <li class="product-card">
+            <a href="{{ route('productos') }}" style="color:inherit;text-decoration:none">
+              <div class="product-card__media {{ $mediaClasses[$loop->index % 4] }}">
+                @if ($producto->imagen_url)
+                  <img src="{{ asset($producto->imagen_url) }}" alt="{{ $producto->nombre }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                @elseif ($producto->coleccion)
+                  <span class="placeholder-tag">{{ $producto->coleccion->nombre_coleccion }}</span>
+                @endif
+                @if ($producto->porcentaje_descuento)
+                  <span class="tag-discount">-{{ $producto->porcentaje_descuento }}%</span>
+                @endif
+              </div>
+              <p class="product-card__name">{{ $producto->nombre }}</p>
+              <p class="product-card__price">
+                @if ($producto->precio_oferta)
+                  <span class="price-old">${{ number_format($producto->precio, 0, ',', '.') }}</span>
+                @endif
+                ${{ number_format($producto->precio_final, 0, ',', '.') }}
+              </p>
+            </a>
+          </li>
+        @endforeach
+      </ul>
+    @endif
   </section>
 
   <!-- ===== CATEGORÍAS PRINCIPALES ===== -->
