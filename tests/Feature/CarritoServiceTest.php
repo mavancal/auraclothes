@@ -119,4 +119,23 @@ class CarritoServiceTest extends TestCase
         $this->assertSame(4, $pedido->detalles->first()->cantidad);
         $this->assertSame(6, $producto->fresh()->stock); // el stock se descuenta recién en el pedido
     }
+
+    public function test_el_envio_se_cobra_por_debajo_del_monto_y_es_gratis_desde_ahi(): void
+    {
+        config(['tienda.envio.costo' => 3500, 'tienda.envio.gratis_desde' => 80000]);
+        $producto = Producto::factory()->create(['precio' => 10000, 'stock' => 20]);
+
+        $this->carrito->agregar($producto->id, 2); // 20.000
+        $this->assertEquals(3500, $this->carrito->costoEnvio());
+        $this->assertEquals(23500, $this->carrito->total());
+
+        $this->carrito->actualizar($producto->id, 8); // 80.000: justo el monto
+        $this->assertEquals(0, $this->carrito->costoEnvio());
+        $this->assertEquals(80000, $this->carrito->total());
+    }
+
+    public function test_el_carrito_vacio_no_cobra_envio(): void
+    {
+        $this->assertEquals(0, $this->carrito->costoEnvio());
+    }
 }

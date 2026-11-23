@@ -123,4 +123,16 @@ class CheckoutTest extends TestCase
         $this->assertSame(0, Pedido::count());
         $this->assertStringContainsString('método de pago', session('errors')->first('metodo_pago_id'));
     }
+
+    public function test_el_pedido_guarda_el_costo_de_envio(): void
+    {
+        config(['tienda.envio.costo' => 3500, 'tienda.envio.gratis_desde' => 80000]);
+        $this->agregarAlCarrito(3); // 3 x 10.000 = 30.000 (precio de la factory)
+
+        $this->post(route('checkout.confirmar'), $this->datosCheckout());
+
+        $pedido = Pedido::sole();
+        $this->assertEquals(3500, $pedido->costo_envio);
+        $this->assertEquals(33500, $pedido->total());
+    }
 }

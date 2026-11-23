@@ -61,6 +61,7 @@
 
           <div style="margin-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem">
             <p style="font-size:1.1rem;font-weight:600">Subtotal: ${{ number_format($subtotal, 0, ',', '.') }}</p>
+            <p style="font-size:0.85rem;color:#666">Envío gratis en compras desde ${{ number_format(config('tienda.envio.gratis_desde'), 0, ',', '.') }}</p>
             <div style="display:flex;gap:0.75rem">
               <form method="POST" action="{{ route('carrito.vaciar') }}">
                 @csrf

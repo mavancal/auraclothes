@@ -27,6 +27,9 @@ class CheckoutController extends Controller
         return view('checkout', [
             'items'       => $this->carrito->items(),
             'subtotal'    => $this->carrito->subtotal(),
+            'costoEnvio'  => $this->carrito->costoEnvio(),
+            'total'       => $this->carrito->total(),
+            'envioGratisDesde' => config('tienda.envio.gratis_desde'),
             'direcciones' => $request->user()->contacto->direcciones()->orderByDesc('es_principal')->get(),
             'metodosPago' => MetodoPago::orderBy('metodo')->get(),
         ]);
@@ -45,6 +48,7 @@ class CheckoutController extends Controller
                 $this->carrito->paraPedido(),
                 $datos['direccion_id'],
                 $datos['metodo_pago_id'],
+                costoEnvio: $this->carrito->costoEnvio(),
             );
         } catch (PedidoInvalidoException $e) {
             return back()->withErrors(['checkout' => $e->getMessage()])->withInput();
