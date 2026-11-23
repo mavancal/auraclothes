@@ -77,7 +77,7 @@
                 <li class="product-card">
                   <div class="product-card__media {{ $mediaClass }}">
                     @if ($producto->imagen_url)
-                      <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                      <img src="{{asset($producto->imagen_url) }}" alt="{{ $producto->nombre }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
                     @else
                       @if ($producto->coleccion)
                         <span class="placeholder-tag">{{ $producto->coleccion->nombre_coleccion }}</span>

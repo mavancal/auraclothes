@@ -31,7 +31,7 @@
                 <li class="product-card" style="display:flex;gap:1rem;align-items:center">
                   <div class="product-card__media product-card__media--sand" style="width:80px;height:80px;flex-shrink:0">
                     @if ($producto->imagen_url)
-                      <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                      <img src="{{ asset($producto->imagen_url) }}" alt="{{ $producto->nombre }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
                     @endif
                   </div>
                   <div>
