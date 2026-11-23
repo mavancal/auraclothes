@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class DireccionService
 {
+        public const MENSAJE_USADA = 'Esta dirección ya se usó en un pedido, así que no se puede modificar. Si cambió, agregá una dirección nueva.';
     /**
      * Agrega una dirección al contacto del usuario.
      * Si es la primera, o si se pide, queda como principal (y se desmarcan las demás).
@@ -71,6 +72,60 @@ class DireccionService
                 ->update(['es_principal' => false]);
 
             $direccion->update(['es_principal' => true]);
+
+            return $direccion;
+        });
+    }
+    /**
+     * Busca una dirección SOLO entre las del usuario y verifica que se pueda editar
+     * (que no se haya usado en ningún pedido).
+     *
+     * @throws DireccionInvalidaException
+     */
+    public function paraEditar(User $user, int $direccionId): Direccion
+    {
+        $direccion = Direccion::where('contacto_id', $user->contacto_id)->find($direccionId);
+
+        if (! $direccion) {
+            throw new DireccionInvalidaException('La dirección no pertenece al usuario.');
+        }
+
+        // Los pedidos apuntan a esta fila: si la cambiáramos, los pedidos viejos
+        // pasarían a mostrar una dirección a la que nunca se enviaron.
+        if ($direccion->pedidos()->exists()) {
+            throw new DireccionInvalidaException(self::MENSAJE_USADA);
+        }
+
+        return $direccion;
+    }
+
+    /**
+     * Corrige los datos de una dirección propia que todavía no se usó en pedidos.
+     * (Si es o no la principal se maneja con marcarComoPrincipal.)
+     *
+     * @throws DireccionInvalidaException
+     */
+    public function actualizar(User $user, int $direccionId, array $datos): Direccion
+    {
+        return DB::transaction(function () use ($user, $direccionId, $datos) {
+            // Mismo bloqueo que en agregar(): una operación sobre las direcciones del contacto a la vez
+            Contacto::whereKey($user->contacto_id)->lockForUpdate()->firstOrFail();
+
+            $direccion = $this->paraEditar($user, $direccionId);
+
+            if (! Localidad::whereKey($datos['localidad_id'])->exists()) {
+                throw new DireccionInvalidaException('La localidad elegida no existe.');
+            }
+
+            $direccion->update([
+                'calle'        => $datos['calle'],
+                'numero'       => $datos['numero'],
+                'piso'         => $datos['piso'] ?? null,
+                'departamento' => $datos['departamento'] ?? null,
+                'cod_postal'   => $datos['cod_postal'] ?? null,
+                'referencia'   => $datos['referencia'] ?? null,
+                'localidad_id' => $datos['localidad_id'],
+            ]);
 
             return $direccion;
         });

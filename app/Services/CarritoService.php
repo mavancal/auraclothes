@@ -101,6 +101,27 @@ class CarritoService
         return $this->items()->sum('subtotal');
     }
 
+    /**
+     * Costo del envío según config/tienda.php: fijo, o gratis desde cierto monto.
+     */
+    public function costoEnvio(): float
+    {
+        $subtotal = $this->subtotal();
+
+        if ($subtotal <= 0) {
+            return 0.0; // carrito vacío: no hay nada que enviar
+        }
+
+        return $subtotal >= config('tienda.envio.gratis_desde')
+            ? 0.0
+            : config('tienda.envio.costo');
+    }
+
+    public function total(): float
+    {
+        return $this->subtotal() + $this->costoEnvio();
+    }
+
     /** Cantidad total de unidades (para el numerito del ícono del carrito). */
     public function cantidadTotal(): int
     {

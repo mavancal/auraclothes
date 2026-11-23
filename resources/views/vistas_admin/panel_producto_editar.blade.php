@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="{{ asset('css/estilos_vista_admin/panel_productos_admin.css') }}" />
   </head>
   <body>
+
+    @include('partials.admin_header')
+    
     <main class="section admin-container">
       <h1 class="page-title">Editar Producto</h1>
 
@@ -69,6 +72,11 @@
               <label for="precio_oferta">Precio de Oferta ($) (Opcional)</label>
               <input type="number" id="precio_oferta" name="precio_oferta" placeholder="0.00" min="0" step="0.01" value="{{ old('precio_oferta', $producto->precio_oferta) }}">
               @error('precio_oferta') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
+            </div>
+            <div class="form-group">
+              <label for="stock">Stock (unidades)</label>
+              <input type="number" id="stock" name="stock" required min="0" max="100000" step="1" value="{{ old('stock', $producto->stock) }}">
+              @error('stock') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
             </div>
           </div>
 

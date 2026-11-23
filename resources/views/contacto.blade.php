@@ -39,32 +39,39 @@
         </section>
 
         <section class="contact-form-box" aria-labelledby="form-title">
-          <div id="contact-success" class="success-msg" hidden>
-            <h2>¡Mensaje enviado!</h2>
-            <p>Te respondemos en menos de 24 horas hábiles.</p>
-            <button class="btn-primary success-msg__button" type="button" id="contact-reset">Enviar otro mensaje</button>
-          </div>
-
-          <form id="contact-form">
-            <h2 id="form-title">Envianos un mensaje</h2>
-            <div class="form-field">
-              <label for="c-nombre">Nombre completo</label>
-              <input type="text" id="c-nombre" name="nombre" placeholder="Ana García" autocomplete="name" required />
+          @if (session('contacto_enviado'))
+            <div id="contact-success" class="success-msg">
+              <h2>¡Mensaje enviado!</h2>
+              <p>Te respondemos en menos de 24 horas hábiles.</p>
+              <a class="btn-primary success-msg__button" href="{{ route('contacto') }}">Enviar otro mensaje</a>
             </div>
-            <div class="form-field">
-              <label for="c-email">Correo electrónico</label>
-              <input type="email" id="c-email" name="email" placeholder="ana@correo.com" autocomplete="email" required />
-            </div>
-            <div class="form-field">
-              <label for="c-asunto">Asunto</label>
-              <input type="text" id="c-asunto" name="asunto" placeholder="Consulta sobre mi pedido" required />
-            </div>
-            <div class="form-field">
-              <label for="c-mensaje">Mensaje</label>
-              <textarea id="c-mensaje" name="mensaje" rows="5" placeholder="Contanos en qué te podemos ayudar..." required></textarea>
-            </div>
-            <button class="btn-primary" type="submit">Enviar mensaje</button>
-          </form>
+          @else
+            <form id="contact-form" method="POST" action="{{ route('contacto.enviar') }}">
+              @csrf
+              <h2 id="form-title">Envianos un mensaje</h2>
+              <div class="form-field">
+                <label for="c-nombre">Nombre completo</label>
+                <input type="text" id="c-nombre" name="nombre" value="{{ old('nombre') }}" placeholder="Ana García" autocomplete="name" required />
+                @error('nombre') <span style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
+              </div>
+              <div class="form-field">
+                <label for="c-email">Correo electrónico</label>
+                <input type="email" id="c-email" name="email" value="{{ old('email') }}" placeholder="ana@correo.com" autocomplete="email" required />
+                @error('email') <span style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
+              </div>
+              <div class="form-field">
+                <label for="c-asunto">Asunto</label>
+                <input type="text" id="c-asunto" name="asunto" value="{{ old('asunto') }}" placeholder="Consulta sobre mi pedido" required />
+                @error('asunto') <span style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
+              </div>
+              <div class="form-field">
+                <label for="c-mensaje">Mensaje</label>
+                <textarea id="c-mensaje" name="mensaje" rows="5" placeholder="Contanos en qué te podemos ayudar..." required>{{ old('mensaje') }}</textarea>
+                @error('mensaje') <span style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
+              </div>
+              <button class="btn-primary" type="submit">Enviar mensaje</button>
+            </form>
+          @endif
         </section>
       </div>
     </main>
@@ -111,7 +118,6 @@
       </div>
     </footer>
 
-    <script type="module" src="./contacto.js"></script>
     <!-- figma:body-end -->
   </body>
 </html>

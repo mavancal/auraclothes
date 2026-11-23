@@ -24,6 +24,7 @@ class MisDireccionesController extends Controller
         return view('mis-direcciones', [
             'direcciones' => $request->user()->contacto->direcciones()
                 ->with('localidad.provincia')
+                ->withExists('pedidos')
                 ->orderByDesc('es_principal')
                 ->orderBy('id')
                 ->get(),
@@ -56,5 +57,31 @@ class MisDireccionesController extends Controller
         }
 
         return back()->with('success', 'Dirección principal actualizada.');
+    }
+    
+    public function edit(Request $request, int $direccionId)
+    {
+        try {
+            $direccion = $this->direcciones->paraEditar($request->user(), $direccionId);
+        } catch (DireccionInvalidaException $e) {
+            return redirect()->route('mis-direcciones')->withErrors(['direccion' => $e->getMessage()]);
+        }
+
+        return view('mis-direcciones-editar', [
+            'direccion'   => $direccion->load('localidad'),
+            'provincias'  => Provincia::orderBy('descripcion')->get(),
+            'localidades' => Localidad::orderBy('descripcion')->get(),
+        ]);
+    }
+
+    public function update(DireccionRequest $request, int $direccionId)
+    {
+        try {
+            $this->direcciones->actualizar($request->user(), $direccionId, $request->validated());
+        } catch (DireccionInvalidaException $e) {
+            return redirect()->route('mis-direcciones')->withErrors(['direccion' => $e->getMessage()]);
+        }
+
+        return redirect()->route('mis-direcciones')->with('success', 'Dirección actualizada.');
     }
 }

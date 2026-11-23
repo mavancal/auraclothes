@@ -43,7 +43,13 @@
               @endforeach
             </ul>
             <p style="font-size:1.1rem;font-weight:600;margin-top:1rem">Subtotal: ${{ number_format($subtotal, 0, ',', '.') }}</p>
-            <p style="font-size:0.9rem;color:#666">Envío: gratis (por ahora)</p>
+            @if ($costoEnvio > 0)
+              <p style="font-size:0.95rem">Envío: ${{ number_format($costoEnvio, 0, ',', '.') }}</p>
+              <p style="font-size:0.8rem;color:#666">Envío gratis en compras desde ${{ number_format($envioGratisDesde, 0, ',', '.') }}</p>
+            @else
+              <p style="font-size:0.95rem;color:green">Envío: gratis</p>
+            @endif
+            <p style="font-size:1.2rem;font-weight:700;margin-top:0.5rem">Total: ${{ number_format($total, 0, ',', '.') }}</p>
           </div>
 
           {{-- Formulario de confirmación --}}
