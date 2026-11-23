@@ -20,5 +20,6 @@
     <li><a class="mainnav__link" href="{{ route('inicio') }}">Ir a la tienda</a></li>
     <li><a class="mainnav__link {{ request()->routeIs('panel_productos_admin*') ? 'is-active' : '' }}" href="{{ route('panel_productos_admin') }}">Productos</a></li>
     <li><a class="mainnav__link {{ request()->routeIs('panel_pedidos_admin*') ? 'is-active' : '' }}" href="{{ route('panel_pedidos_admin') }}">Pedidos</a></li>
+    <li><a class="mainnav__link {{ request()->routeIs('panel_mensajes_admin*') ? 'is-active' : '' }}" href="{{ route('panel_mensajes_admin') }}">Mensajes</a></li>
   </ul>
 </nav>
