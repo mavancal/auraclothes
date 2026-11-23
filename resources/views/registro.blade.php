@@ -27,7 +27,7 @@
           <h2>Datos recibidos</h2>
           <p>El formulario se completó correctamente.</p>
           <button class="btn btn--primary" id="registration-reset" type="button">Completar otro registro</button>
-          <a class="text-link" href="../cuenta/index.html">Volver a iniciar sesión</a>
+          <a class="text-link" href="{{ route('cuenta') }}">Volver a iniciar sesión</a>
         </div>
 
         @if(session('success'))
@@ -40,6 +40,7 @@
         @if($errors->any())
           <div class="error-summary" style="color:#b00020;margin-bottom:1rem;">
             <p>Hay errores en el formulario. Revisá los campos marcados.</p>
+            @error('registro') <p>{{ $message }}</p> @enderror
           </div>
         @endif
 
@@ -50,7 +51,7 @@
             <div class="form-grid">
               <div class="form-field">
                 <label for="name">Nombre de usuario</label>
-                <input type="text" id="name" name="name" autocomplete="username" required />
+                <input type="text" id="name" name="name" value="{{ old('name') }}" autocomplete="username" required />
                 @error('name') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
@@ -65,7 +66,7 @@
               </div>
               <div class="form-field form-field--wide">
                 <label for="email">Correo</label>
-                <input type="email" id="email" name="email" autocomplete="email" required />
+                <input type="email" id="email" name="email" value="{{ old('email') }}" autocomplete="email" required />
                 @error('email') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
             </div>
@@ -77,30 +78,30 @@
             <div class="form-grid">
               <div class="form-field">
                 <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" name="nombre" autocomplete="given-name" required />
+                <input type="text" id="nombre" name="nombre" value="{{ old('nombre') }}" autocomplete="given-name" required />
                 @error('nombre') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="nombre2">Segundo nombre</label>
-                <input type="text" id="nombre2" name="nombre2" autocomplete="additional-name" />
+                <input type="text" id="nombre2" name="nombre2" value="{{ old('nombre2') }}" autocomplete="additional-name" />
                 @error('nombre2') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="apellido">Apellido</label>
-                <input type="text" id="apellido" name="apellido" autocomplete="family-name" required />
+                <input type="text" id="apellido" name="apellido" value="{{ old('apellido') }}" autocomplete="family-name" required />
                 @error('apellido') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="fecha_nacimiento">Fecha de nacimiento</label>
-                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" autocomplete="bday" required />
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" value="{{ old('fecha_nacimiento') }}" autocomplete="bday" required />
                 @error('fecha_nacimiento') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="tipo_persona_id">Tipo de persona</label>
                 <select id="tipo_persona_id" name="tipo_persona_id" required>
-                  <option value="" selected disabled>Seleccionar</option>
+                  <option value="" disabled @selected(! old('tipo_persona_id'))>Seleccionar</option>
                   @foreach($tiposPersona ?? [] as $tipoPersona)
-                    <option value="{{ $tipoPersona->id }}">{{ $tipoPersona->descripcion }}</option>
+                    <option value="{{ $tipoPersona->id }}" @selected(old('tipo_persona_id') == $tipoPersona->id)>{{ $tipoPersona->descripcion }}</option>
                   @endforeach
 
 
@@ -112,7 +113,7 @@
               </div>
               <div class="form-field">
                 <label for="cuit">CUIT</label>
-                <input type="text" id="cuit" name="cuit" inputmode="numeric" placeholder="XX-XXXXXXXX-X" />
+                <input type="text" id="cuit" name="cuit" value="{{ old('cuit') }}" inputmode="numeric" placeholder="XX-XXXXXXXX-X" />
                 @error('cuit') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
             </div>
@@ -124,26 +125,26 @@
               <div class="form-field">
                 <label for="tipo_documento_id">Tipo de documento</label>
                 <select id="tipo_documento_id" name="tipo_documento_id" required>
-                  <option value="" selected disabled>Seleccionar</option>
+                  <option value="" disabled @selected(! old('tipo_documento_id'))>Seleccionar</option>
                   @foreach($tiposDocumento ?? [] as $tipoDocumento)
-                    <option value="{{ $tipoDocumento->id }}">{{ $tipoDocumento->descripcion }}</option>
+                    <option value="{{ $tipoDocumento->id }}" @selected(old('tipo_documento_id') == $tipoDocumento->id)>{{ $tipoDocumento->descripcion }}</option>
                   @endforeach
 </select>
                 @error('tipo_documento_id') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="numero_documento">Número de documento</label>
-                <input type="text" id="numero_documento" name="numero_documento" required />
+                <input type="text" id="numero_documento" name="numero_documento" value="{{ old('numero_documento') }}" required />
                 @error('numero_documento') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="telefono">Teléfono</label>
-                <input type="tel" id="telefono" name="telefono" autocomplete="tel" required />
+                <input type="tel" id="telefono" name="telefono" value="{{ old('telefono') }}" autocomplete="tel" required />
                 @error('telefono') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="email_contacto">Email de contacto</label>
-                <input type="email" id="email_contacto" name="email_contacto" autocomplete="email" required />
+                <input type="email" id="email_contacto" name="email_contacto" value="{{ old('email_contacto') }}" autocomplete="email" required />
                 @error('email_contacto') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
             </div>
@@ -154,35 +155,35 @@
             <div class="form-grid">
               <div class="form-field form-field--wide">
                 <label for="calle">Calle</label>
-                <input type="text" id="calle" name="calle" autocomplete="street-address" required />
+                <input type="text" id="calle" name="calle" value="{{ old('calle') }}" autocomplete="street-address" required />
                 @error('calle') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="numero">Número</label>
-                <input type="text" id="numero" name="numero" required />
+                <input type="text" id="numero" name="numero" value="{{ old('numero') }}" required />
                 @error('numero') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="piso">Piso</label>
-                <input type="text" id="piso" name="piso" />
+                <input type="text" id="piso" name="piso" value="{{ old('piso') }}" />
                 @error('piso') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="departamento">Departamento</label>
-                <input type="text" id="departamento" name="departamento" />
+                <input type="text" id="departamento" name="departamento" value="{{ old('departamento') }}" />
                 @error('departamento') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="cod_postal">Código postal</label>
-                <input type="text" id="cod_postal" name="cod_postal" />
+                <input type="text" id="cod_postal" name="cod_postal" value="{{ old('cod_postal') }}" />
                 @error('cod_postal') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field">
                 <label for="provincia_id">Provincia</label>
                 <select id="provincia_id" name="provincia_id" required>
-                  <option value="" selected disabled>Seleccionar</option>
+                  <option value="" disabled @selected(! old('provincia_id'))>Seleccionar</option>
                   @foreach($provincias ?? [] as $provincia)
-                    <option value="{{ $provincia->id }}">{{ $provincia->descripcion }}</option>
+                    <option value="{{ $provincia->id }}" @selected(old('provincia_id') == $provincia->id)>{{ $provincia->descripcion }}</option>
                   @endforeach
                 </select>
                 @error('provincia_id') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
@@ -190,16 +191,16 @@
               <div class="form-field">
                 <label for="localidad_id">Localidad</label>
                 <select id="localidad_id" name="localidad_id" required>
-                  <option value="" selected disabled>Seleccionar</option>
+                  <option value="" disabled @selected(! old('localidad_id'))>Seleccionar</option>
                   @foreach($localidades ?? [] as $localidad)
-                    <option value="{{ $localidad->id }}">{{ $localidad->descripcion }}</option>
+                    <option value="{{ $localidad->id }}" @selected(old('localidad_id') == $localidad->id)>{{ $localidad->descripcion }}</option>
                   @endforeach
                 </select>
                 @error('localidad_id') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
               <div class="form-field form-field--wide">
                 <label for="referencia">Referencia</label>
-                <input type="text" id="referencia" name="referencia" />
+                <input type="text" id="referencia" name="referencia" value="{{ old('referencia') }}" />
                 @error('referencia') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
             </div>

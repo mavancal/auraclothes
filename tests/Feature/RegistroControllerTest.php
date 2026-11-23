@@ -91,4 +91,15 @@ class RegistroControllerTest extends TestCase
         $this->assertStringContainsString('nombre de usuario', $errores->first('name'));
         $this->assertStringContainsString('contraseña', $errores->first('password'));
     }
+
+    public function test_si_hay_un_error_el_formulario_conserva_lo_escrito(): void
+    {
+        $this->followingRedirects()
+            ->from(route('registro'))
+            ->post(route('registro.store'), $this->formulario(['cuit' => '123'])) // CUIT inválido
+            ->assertOk()
+            ->assertSee('value="mariagomez"', false)
+            ->assertSee('value="Av. Uruguay"', false)
+            ->assertDontSee('value="secreto123"', false); // la contraseña nunca vuelve
+    }
 }
