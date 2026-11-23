@@ -11,28 +11,7 @@
   </head>
   <body>
 
-    <!-- ===== TOPBAR ADMIN ===== -->
-    <header class="topbar">
-      <div class="topbar__inner">
-        <div class="logo" aria-label="AURA CLOTHES, Administración">
-          <span class="logo__mark">AC</span>
-          <span class="logo__word">ADMINISTRACIÓN</span>
-        </div>
-        <div class="topbar__actions">
-          <button class="btn btn--outline" type="button" onclick="logout()">Salir de la cuenta</button>
-        </div>
-      </div>
-    </header>
-
-    <!-- ===== NAVBAR ADMIN ===== -->
-    <nav class="mainnav" aria-label="Navegación de administración">
-      <ul class="mainnav__list">
-        <li><a class="mainnav__link" href="{{ route('inicio') }}">Inicio</a></li>
-        <li><a class="mainnav__link is-active" href="#">Productos</a></li>
-        <li><a class="mainnav__link" href="#">Pedidos</a></li>
-        <li><a class="mainnav__link" href="#">Usuarios</a></li>
-      </ul>
-    </nav>
+    @include('partials.admin_header')
 
     <!-- ===== CONTENIDO ===== -->
     <main class="section admin-container">
@@ -97,6 +76,11 @@
                 <label for="precio_oferta">Precio de Oferta ($) (Opcional)</label>
                 <input type="number" id="precio_oferta" name="precio_oferta" placeholder="0.00" min="0" step="0.01" value="{{ old('precio_oferta') }}">
 @error('precio_oferta') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
+              </div>
+              <div class="form-group">
+                <label for="stock">Stock (unidades)</label>
+                <input type="number" id="stock" name="stock" required min="0" max="100000" step="1" value="{{ old('stock', 0) }}">
+                @error('stock') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
               </div>
             </div>
 
@@ -248,6 +232,7 @@
               <th style="text-align:left;padding:.5rem;">Nombre</th>
               <th style="text-align:left;padding:.5rem;">Precio</th>
               <th style="text-align:left;padding:.5rem;">Oferta</th>
+              <th style="text-align:left;padding:.5rem;">Stock</th>
               <th style="text-align:left;padding:.5rem;">Colección</th>
               <th style="text-align:left;padding:.5rem;">Categoría</th>
               <th style="text-align:left;padding:.5rem;">Activo</th>
@@ -261,6 +246,7 @@
                 <td style="padding:.5rem;">{{ $producto->nombre }}</td>
                 <td style="padding:.5rem;">{{ $producto->precio }}</td>
                 <td style="padding:.5rem;">{{ $producto->precio_oferta ?? '-' }}</td>
+                <td style="padding:.5rem;">{{ $producto->stock }}</td>
                 <td style="padding:.5rem;">{{ $producto->coleccion?->nombre_coleccion ?? '-' }}</td>
                 <td style="padding:.5rem;">{{ $producto->categorias->pluck('nombre_categoria')->join(', ') ?: '-' }}</td>
                 <td style="padding:.5rem;">{{ $producto->activo ? 'Sí' : 'No' }}</td>
@@ -280,6 +266,5 @@
 
     </main>
 
-    <script src="admin.js"></script>
   </body>
 </html>

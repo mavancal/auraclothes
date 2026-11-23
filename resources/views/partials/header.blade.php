@@ -51,9 +51,6 @@
     <li><a class="mainnav__link" href="{{ route('productos') }}">Productos</a></li>
     <li><a class="mainnav__link" href="{{ route('contacto') }}">Contacto</a></li>
     <li><a class="mainnav__link" href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
-    @auth
-      <li><a class="mainnav__link" href="{{ route('mis-pedidos') }}">Mis pedidos</a></li>
-    @endauth
   </ul>
 </nav>
 

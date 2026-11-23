@@ -84,4 +84,15 @@ class PanelProductosStockTest extends TestCase
 
         $this->assertSame(0, Producto::count());
     }
+
+    public function test_el_formulario_de_editar_muestra_el_stock_actual(): void
+    {
+        $producto = Producto::factory()->create(['stock' => 37]);
+
+        $this->actingAs($this->admin)
+            ->get(route('panel_productos_admin.productos.edit', $producto))
+            ->assertOk()
+            ->assertSee('name="stock"', false)
+            ->assertSee('value="37"', false);
+    }
 }

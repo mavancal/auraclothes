@@ -69,4 +69,12 @@ class CarritoControllerTest extends TestCase
 
         $this->assertSame(0, $this->cantidadEnCarrito());
     }
+    
+    public function test_el_carrito_vacio_muestra_el_mensaje(): void
+    {
+        $this->get(route('carrito'))
+            ->assertOk()
+            ->assertSee('Tu carrito está vacío')
+            ->assertDontSee('Finalizar compra');
+    }
 }

@@ -108,4 +108,31 @@ class PanelPedidosTest extends TestCase
 
         $this->assertSame(EstadoPedido::PENDIENTE, $this->estadoActual());
     }
+
+    public function test_el_listado_y_el_detalle_cargan(): void
+    {
+        $this->actingAs($this->empleado)
+            ->get(route('panel_pedidos_admin'))
+            ->assertOk()
+            ->assertSee('#' . $this->pedido->id);
+
+        // Desde Pendiente solo se puede pasar a Pagado o Cancelado
+        $this->actingAs($this->empleado)
+            ->get(route('panel_pedidos_admin.show', $this->pedido))
+            ->assertOk()
+            ->assertSee('value="Pagado"', false)
+            ->assertSee('value="Cancelado"', false)
+            ->assertDontSee('value="Enviado"', false);
+    }
+
+    public function test_el_filtro_por_estado_funciona(): void
+    {
+        $pagadoId = \App\Models\EstadoPedido::where('descripcion', EstadoPedido::PAGADO)->value('id');
+
+        // El pedido está Pendiente: filtrando por Pagado no aparece
+        $this->actingAs($this->empleado)
+            ->get(route('panel_pedidos_admin', ['estado_pedido_id' => $pagadoId]))
+            ->assertOk()
+            ->assertSee('0 pedido(s)');
+    }
 }

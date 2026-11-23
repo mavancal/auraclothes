@@ -24,7 +24,7 @@
           <p style="color:red;margin-bottom:1rem">{{ $message }}</p>
         @enderror
 
-        @if (empty($items))
+        @if ($items->isEmpty())
           <p class="empty-msg">Tu carrito está vacío.</p>
           <p style="margin-top:1rem"><a href="{{ route('productos') }}" class="filter-btn">Ir a productos</a></p>
         @else
