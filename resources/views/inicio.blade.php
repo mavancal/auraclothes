@@ -141,16 +141,25 @@
   </section>
 
   <!-- ===== NEWSLETTER ===== -->
-  <section class="newsletter">
+    <section class="newsletter" id="newsletter">
     <div class="newsletter__inner">
       <h2 class="newsletter__title">Novedades una vez al mes, nada más</h2>
       <p class="newsletter__body">Nuevos productos, reposiciones y descuentos
       exclusivos para quienes se suscriben.</p>
-      <form class="newsletter__form" action="#">
+
+      @if (session('newsletter'))
+        <p style="color:#1e4620;background:#e6f4ea;padding:.5rem 1rem;border-radius:4px;margin-bottom:1rem;">{{ session('newsletter') }}</p>
+      @endif
+
+      <form class="newsletter__form" method="POST" action="{{ route('newsletter.suscribir') }}">
+        @csrf
         <label class="visually-hidden" for="newsletter-email">Correo electrónico</label>
-        <input class="newsletter__input" type="email" id="newsletter-email" name="email" placeholder="tu@correo.com" required>
+        <input class="newsletter__input" type="email" id="newsletter-email" name="email" value="{{ old('email') }}" placeholder="tu@correo.com" required>
         <button class="newsletter__button" type="submit">Suscribirme</button>
       </form>
+      @error('email', 'newsletter')
+        <p style="color:#b00020;margin-top:.5rem;">{{ $message }}</p>
+      @enderror
     </div>
   </section>
 

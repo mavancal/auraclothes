@@ -12,6 +12,7 @@ use App\Http\Controllers\MisPedidosController;
 use App\Http\Controllers\PanelPedidosController;
 use App\Http\Controllers\MisDireccionesController;
 use App\Http\Controllers\MiCuentaController;
+use App\Http\Controllers\NewsletterController;
 
 Route::view('/','inicio')->name('inicio');
 
@@ -41,6 +42,8 @@ Route::middleware('auth')->group(function () {
 Route::view('/nuevo','nuevo')->name('nuevo');
 
 Route::view('/contacto','contacto')->name('contacto');
+
+Route::post('/newsletter', [NewsletterController::class, 'store'])->middleware('throttle:10,1')->name('newsletter.suscribir');
 
 Route::view('/quienes-somos','quienes-somos')->name('quienes-somos');
 
