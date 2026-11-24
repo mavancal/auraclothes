@@ -84,4 +84,15 @@ class MisDireccionesController extends Controller
 
         return redirect()->route('mis-direcciones')->with('success', 'Dirección actualizada.');
     }
+
+    public function destroy(Request $request, int $direccionId)
+    {
+        try {
+            $this->direcciones->eliminar($request->user(), $direccionId);
+        } catch (DireccionInvalidaException $e) {
+            return redirect()->route('mis-direcciones')->withErrors(['direccion' => $e->getMessage()]);
+        }
+
+        return redirect()->route('mis-direcciones')->with('success', 'Dirección eliminada correctamente.');
+    }
 }

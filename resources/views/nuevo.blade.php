@@ -29,25 +29,27 @@
                     $mediaClass = $mediaClasses[$loop->index % 4];
                 @endphp
                 <li class="product-card">
-                    <div class="product-card__media {{ $mediaClass }}">
-                        @if ($producto->imagen_url)
-                        <img src="{{asset($producto->imagen_url) }}" alt="{{ $producto->nombre }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
-                        @else
-                        @if ($producto->coleccion)
-                            <span class="placeholder-tag">{{ $producto->coleccion->nombre_coleccion }}</span>
-                        @endif
-                        @endif
-                        @if ($producto->porcentaje_descuento)
-                        <span class="tag-discount">-{{ $producto->porcentaje_descuento }}%</span>
-                        @endif
-                    </div>
-                    <p class="product-card__name">{{ $producto->nombre }}</p>
-                    <p class="product-card__price">
-                        @if ($producto->precio_oferta)
-                        <span class="price-old">${{ number_format($producto->precio, 0, ',', '.') }}</span>
-                        @endif
-                        ${{ number_format($producto->precio_final, 0, ',', '.') }}
-                    </p>
+                    <a href="{{ route('productos.show', $producto) }}" style="text-decoration:none;color:inherit;display:block;">
+                        <div class="product-card__media {{ $mediaClass }}">
+                            @if ($producto->imagen_url)
+                            <img src="{{asset($producto->imagen_url) }}" alt="{{ $producto->nombre }}" style="width:100%;height:100%;object-fit:cover;display:block;" />
+                            @else
+                            @if ($producto->coleccion)
+                                <span class="placeholder-tag">{{ $producto->coleccion->nombre_coleccion }}</span>
+                            @endif
+                            @endif
+                            @if ($producto->porcentaje_descuento)
+                            <span class="tag-discount">-{{ $producto->porcentaje_descuento }}%</span>
+                            @endif
+                        </div>
+                        <p class="product-card__name">{{ $producto->nombre }}</p>
+                        <p class="product-card__price">
+                            @if ($producto->precio_oferta)
+                            <span class="price-old">${{ number_format($producto->precio, 0, ',', '.') }}</span>
+                            @endif
+                            ${{ number_format($producto->precio_final, 0, ',', '.') }}
+                        </p>
+                    </a>
                     <form method="POST" action="{{ route('carrito.agregar') }}" style="margin-top:0.5rem;display:flex;gap:0.4rem;align-items:center">
                         @csrf
                         <input type="hidden" name="producto_id" value="{{ $producto->id }}">
@@ -63,48 +65,6 @@
       </div>
     </main>
 
-    <footer class="footer">
-      <div class="footer__grid">
-        <div>
-          <p class="footer__brand">AURA CLOTHES</p>
-          <p class="footer__body">Prendas de lana, algodón y lino de uso diario, hechas en talleres pequeños.</p>
-        </div>
-        <div>
-          <h3 class="footer__heading">Navegación</h3>
-          <ul class="footer__list">
-            <li><a href="{{ route('inicio') }}">Inicio</a></li>
-            <li><a href="{{ route('productos') }}">Productos</a></li>
-            <li><a href="{{ route('carrito') }}">Carrito</a></li>
-            <li><a href="{{ route('mis-pedidos') }}">Mis pedidos</a></li>
-            <li><a href="{{ route('mis-direcciones') }}">Mis direcciones</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="footer__heading">Ayuda</h3>
-          <ul class="footer__list">
-            <li><a href="#">Envíos y entregas</a></li>
-            <li><a href="#">Cambios y devoluciones</a></li>
-            <li><a href="{{ route('contacto') }}">Contacto</a></li>
-            <li><a href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="footer__heading">Contacto</h3>
-          <p class="footer__body">Lun a vie 9–18 hs · Sáb 9–13 hs</p>
-          <ul class="footer__list footer__list--inline">
-            <li><a href="#">Instagram</a></li>
-            <li><a href="#">Facebook</a></li>
-            <li><a href="#">Pinterest</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <p>© 2026 AURA CLOTHES. Todos los derechos reservados.</p>
-        <ul class="footer__legal">
-          <li><a href="#">Términos</a></li>
-          <li><a href="#">Privacidad</a></li>
-        </ul>
-      </div>
-    </footer>
+    @include('partials.footer')
   </body>
 </html>

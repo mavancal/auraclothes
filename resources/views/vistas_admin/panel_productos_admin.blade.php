@@ -56,13 +56,13 @@
 
             <div class="form-group">
               <label for="descripcion">Descripción</label>
-              <textarea id="descripcion" name="descripcion" rows="3" required placeholder="Detalles de la prenda...">{{ old('descripcion') }}</textarea>
+              <textarea id="descripcion" name="descripcion" rows="3" placeholder="Detalles de la prenda...">{{ old('descripcion') }}</textarea>
 @error('descripcion') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
             </div>
 
             <div class="form-group">
               <label for="imagen_url">URL de Imagen</label>
-              <input type="text" id="imagen_url" name="imagen_url" required placeholder=""/img/productos/archivo.jpg o https://..."" value="{{ old('imagen_url') }}">
+              <input type="text" id="imagen_url" name="imagen_url" placeholder="/img/productos/archivo.jpg o https://..." value="{{ old('imagen_url') }}">
 @error('imagen_url') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
             </div>
 

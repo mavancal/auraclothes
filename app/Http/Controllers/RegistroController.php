@@ -26,11 +26,13 @@ class RegistroController extends Controller
     {
         // Si llegamos acá, los datos ya pasaron todas las reglas de RegistroRequest
         try {
-            $registro->registrar($request->validated());
+            $user = $registro->registrar($request->validated());
         } catch (RegistroInvalidoException $e) {
             return back()->withErrors(['registro' => $e->getMessage()])->withInput();
         }
 
-        return redirect()->route('registro')->with('success', 'Cuenta creada correctamente.');
+        auth()->login($user);
+
+        return redirect()->route('inicio')->with('success', 'Cuenta creada correctamente.');
     }
 }

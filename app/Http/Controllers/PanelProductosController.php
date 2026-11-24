@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductoRequest;
+use App\Http\Requests\UpdateProductoRequest;
 use App\Models\CategoriaProducto;
 use App\Models\Coleccion;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class PanelProductosController extends Controller
@@ -19,20 +22,9 @@ class PanelProductosController extends Controller
         ]);
     }
 
-    public function storeProducto(Request $request)
+    public function storeProducto(StoreProductoRequest $request)
     {
-        $validated = $request->validate([
-            'sku' => ['required', 'string', 'max:50', 'unique:productos,sku'],
-            'nombre' => ['required', 'string', 'max:150'],
-            'descripcion' => ['nullable', 'string'],
-            'imagen_url' => ['nullable', 'string', 'max:255'],
-            'precio' => ['required', 'numeric', 'min:0'],
-            'precio_oferta' => ['nullable', 'numeric', 'min:0', 'lte:precio'],
-            'stock' => ['nullable', 'integer', 'min:0', 'max:100000'],
-            'categoria_id' => ['required', 'exists:categorias_producto,id'],
-            'coleccion_id' => ['nullable', 'exists:colecciones,id'],
-            'activo' => ['nullable', 'boolean'],
-        ]);
+        $validated = $request->validated();
 
         $producto = Producto::create([
             'sku' => $validated['sku'],
@@ -82,20 +74,9 @@ class PanelProductosController extends Controller
         ]);
     }
 
-    public function updateProducto(Producto $producto, Request $request)
+    public function updateProducto(Producto $producto, UpdateProductoRequest $request)
     {
-        $validated = $request->validate([
-            'sku' => ['required', 'string', 'max:50', Rule::unique('productos', 'sku')->ignore($producto->id)],
-            'nombre' => ['required', 'string', 'max:150'],
-            'descripcion' => ['nullable', 'string'],
-            'imagen_url' => ['nullable', 'string', 'max:255'],
-            'precio' => ['required', 'numeric', 'min:0'],
-            'precio_oferta' => ['nullable', 'numeric', 'min:0', 'lte:precio'],
-            'stock' => ['nullable', 'integer', 'min:0', 'max:100000'],
-            'categoria_id' => ['required', 'exists:categorias_producto,id'],
-            'coleccion_id' => ['nullable', 'exists:colecciones,id'],
-            'activo' => ['nullable', 'boolean'],
-        ]);
+        $validated = $request->validated();
 
         $producto->update([
             'sku' => $validated['sku'],
@@ -120,9 +101,15 @@ class PanelProductosController extends Controller
 
     public function destroyProducto(Producto $producto)
     {
+        if ($producto->detalles()->exists()) {
+            return redirect()->route('panel_productos_admin')->with('error', 'No se pudo eliminar el producto (tiene pedidos asociados). Podés desactivarlo.');
+        }
+
         try {
-            $producto->categorias()->detach();
-            $producto->delete();
+            DB::transaction(function () use ($producto) {
+                $producto->categorias()->detach();
+                $producto->delete();
+            });
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->route('panel_productos_admin')->with('error', 'No se pudo eliminar el producto (tiene pedidos asociados). Podés desactivarlo.');
         }

@@ -71,47 +71,6 @@
       </div>
     </main>
 
-    <footer class="footer">
-      <div class="footer__grid">
-        <div>
-          <p class="footer__brand">AURA CLOTHES</p>
-          <p class="footer__body">Prendas de lana, algodón y lino de uso diario, hechas en talleres pequeños.</p>
-        </div>
-        <div>
-          <h3 class="footer__heading">Navegación</h3>
-          <ul class="footer__list">
-            <li><a href="{{ route('inicio') }}">Inicio</a></li>
-            <li><a href="{{ route('productos') }}">Productos</a></li>
-            <li><a href="{{ route('carrito') }}">Carrito</a></li>
-            <li><a href="{{ route('mis-pedidos') }}">Mis pedidos</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="footer__heading">Ayuda</h3>
-          <ul class="footer__list">
-            <li><a href="#">Envíos y entregas</a></li>
-            <li><a href="#">Cambios y devoluciones</a></li>
-            <li><a href="{{ route('contacto') }}">Contacto</a></li>
-            <li><a href="{{ route('quienes-somos') }}">Quiénes somos</a></li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="footer__heading">Contacto</h3>
-          <p class="footer__body">Lun a vie 9–18 hs · Sáb 9–13 hs</p>
-          <ul class="footer__list footer__list--inline">
-            <li><a href="#">Instagram</a></li>
-            <li><a href="#">Facebook</a></li>
-            <li><a href="#">Pinterest</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <p>© 2026 AURA CLOTHES. Todos los derechos reservados.</p>
-        <ul class="footer__legal">
-          <li><a href="#">Términos</a></li>
-          <li><a href="#">Privacidad</a></li>
-        </ul>
-      </div>
-    </footer>
+    @include('partials.footer')
   </body>
 </html>

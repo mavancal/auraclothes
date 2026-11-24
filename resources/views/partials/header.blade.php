@@ -37,9 +37,12 @@
       </form>
     @endauth
 
-      <a class="icon-btn" href="{{ route('carrito') }}" aria-label="Ver carrito">
+      <a class="icon-btn" href="{{ route('carrito') }}" aria-label="Ver carrito" style="position:relative;">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16l-1.5 10.5a2 2 0 0 1-2 1.5H7.5a2 2 0 0 1-2-1.5L4 6z"></path><path d="M8 6V5a4 4 0 0 1 8 0v1"></path></svg>
         <span class="icon-btn__label">Carrito</span>
+        @if(($carritoCantidadTotal ?? 0) > 0)
+          <span class="icon-btn__badge">{{ $carritoCantidadTotal }}</span>
+        @endif
       </a>
     </div>
   </div>

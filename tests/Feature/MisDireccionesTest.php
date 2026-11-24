@@ -188,4 +188,55 @@ class MisDireccionesTest extends TestCase
 
         $this->assertSame('Ajena', $ajena->fresh()->calle);
     }
+
+    public function test_eliminar_direccion_propia(): void
+    {
+        $segunda = app(DireccionService::class)->agregar($this->user, [
+            'calle' => 'Segunda Calle',
+            'numero' => '200',
+            'localidad_id' => Localidad::query()->value('id'),
+        ]);
+
+        $this->actingAs($this->user)
+            ->delete(route('mis-direcciones.destroy', $segunda->id))
+            ->assertRedirect(route('mis-direcciones'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseMissing('direcciones', ['id' => $segunda->id]);
+    }
+
+    public function test_no_se_puede_eliminar_direccion_con_pedidos(): void
+    {
+        $producto = Producto::factory()->create(['stock' => 5]);
+        app(PedidoService::class)->crear(
+            $this->user,
+            [['producto_id' => $producto->id, 'cantidad' => 1]],
+            $this->casa->id,
+            MetodoPago::query()->value('id'),
+        );
+
+        $this->actingAs($this->user)
+            ->delete(route('mis-direcciones.destroy', $this->casa->id))
+            ->assertRedirect(route('mis-direcciones'))
+            ->assertSessionHasErrors(['direccion' => DireccionService::MENSAJE_ELIMINAR_USADA]);
+
+        $this->assertDatabaseHas('direcciones', ['id' => $this->casa->id]);
+    }
+
+    public function test_no_se_puede_eliminar_la_direccion_de_otro(): void
+    {
+        $otro = User::factory()->create();
+        $ajena = app(DireccionService::class)->agregar($otro, [
+            'calle' => 'Ajena',
+            'numero' => '1',
+            'localidad_id' => Localidad::query()->value('id'),
+        ]);
+
+        $this->actingAs($this->user)
+            ->delete(route('mis-direcciones.destroy', $ajena->id))
+            ->assertRedirect(route('mis-direcciones'))
+            ->assertSessionHasErrors(['direccion' => 'La dirección no pertenece al usuario.']);
+
+        $this->assertDatabaseHas('direcciones', ['id' => $ajena->id]);
+    }
 }
