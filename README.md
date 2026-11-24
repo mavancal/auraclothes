@@ -566,25 +566,20 @@ Las *factories* (`database/factories`) fabrican datos de prueba: `Producto::fact
 
 ## Estado del proyecto
 
-**Hecho (backend)**
+**Completado**
 
-- Base de datos: migraciones, modelos con relaciones, reglas de integridad y seeders.
-- Modelos reforzados: `$fillable`, conversiones de tipos, scopes y precio final calculado.
-- Pedidos: creación con control de stock y precio vigente, estados con transiciones válidas y cancelación con devolución de stock.
-- Registro de clientes y direcciones (una sola principal).
-- Catálogo con búsqueda, filtros, orden y paginación.
-- Carrito en sesión y checkout (el carrito se convierte en pedido).
-- Inicio y cierre de sesión, permisos por rol (middleware `nivel`) y `PedidoPolicy`.
-- "Mis pedidos" para clientes y panel de pedidos para el personal.
-- "Mi cuenta": direcciones (agregar y elegir la principal), datos personales y cambio de contraseña.
-- Validaciones con Form Requests y aplicación en español.
-- Stock de los productos desde el panel (backend).
-- 94 tests automáticos propios.
+- **Base de datos y modelos:** migraciones, modelos con relaciones Eloquent, reglas de integridad, seeders y `$fillable` seguro.
+- **Autenticación y usuarios:** inicio y cierre de sesión, registro con rate limiting (`throttle`), recuperación de contraseña por email (`/password/olvide` y `/password/reset`), gestión de usuarios y personal desde el panel administrativo con diferenciación entre Administrador (`nivel:100`) y Empleado (`nivel:50`).
+- **Catálogo y productos:** listado con búsqueda y filtros, vista individual de detalle de producto (`/productos/{id}`) con productos relacionados, CRUD de productos, categorías y colecciones en el panel con Form Requests y protección de integridad referencial con transacciones.
+- **Carrito y compras:** carrito en sesión con badge contador en cabecera mediante View Composer, control de stock disponible, checkout y costo de envío configurable (`config/tienda.php`).
+- **Direcciones y cuenta:** gestión de direcciones personales (agregar, elegir principal, editar y eliminar con comprobación de pedidos asociados), filtrado dinámico provincia-localidad en frontend, y edición de datos de cuenta.
+- **Páginas institucionales y legales:** páginas completas de Envíos y entregas, Cambios y devoluciones, Términos y condiciones, Políticas de privacidad, Contacto y Quiénes somos.
+- **Optimización y assets:** optimización y compresión de imágenes de productos (reducción superior al 90% en peso de carga).
+- **Control de calidad:** suite automatizada de más de 140 tests de Feature y Unitarios en español.
 
-**Pendiente**
+**Pendiente (Fase 3)**
 
-- Frontend: conectar el login (`cuenta`), el cierre de sesión, `productos.blade.php` con los datos reales, y crear las vistas `carrito`, `checkout`, `mis-pedidos`, `mis-pedidos-detalle`, `mis-direcciones`, `mi-cuenta`, `panel_pedidos_admin` y `panel_pedido_detalle` (ver [Guía para conectar las vistas](#guía-para-conectar-las-vistas)).
-- Panel de productos: agregar el campo `stock` en los formularios de crear y editar (el backend ya lo acepta).
-- Definir el costo de envío (hoy es 0).
-- Decidir si se pueden borrar o desactivar direcciones (las que se usaron en pedidos no se pueden borrar).
-- Actualizar el DER de draw.io (ya están `docs/DER.png`, `docs/DER.mmd` y los dumps en `docs/`).
+- Pasarela de pago real (integración con webhooks de Mercado Pago / Stripe y transición automática a "Pagado").
+- Envíos de notificaciones por email transaccional (confirmación de pedido, despacho y respuestas de contacto) y panel de gestión/baja para newsletter.
+- Modelado de variantes de prendas (matriz de talles y colores con stock independiente por SKU).
+- Sistema de cupones de descuento integrado con `$descuento` en `PedidoService`.

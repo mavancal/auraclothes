@@ -61,11 +61,12 @@ class RegistroControllerTest extends TestCase
     public function test_registra_y_guarda_el_cuit_sin_guiones(): void
     {
         $this->enviar()
-            ->assertRedirect(route('registro'))
+            ->assertRedirect(route('inicio'))
             ->assertSessionHas('success');
 
         $user = User::where('email', 'maria@mail.com')->firstOrFail();
         $this->assertSame('27401234565', $user->contacto->cuit);
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_cuit_con_menos_digitos_da_error(): void
@@ -101,5 +102,17 @@ class RegistroControllerTest extends TestCase
             ->assertSee('value="mariagomez"', false)
             ->assertSee('value="Av. Uruguay"', false)
             ->assertDontSee('value="secreto123"', false); // la contraseña nunca vuelve
+    }
+
+    public function test_registro_tiene_rate_limiting(): void
+    {
+        for ($i = 0; $i < 5; $i++) {
+            $this->withServerVariables(['REMOTE_ADDR' => '192.168.1.1'])
+                ->post(route('registro.store'), []);
+        }
+
+        $this->withServerVariables(['REMOTE_ADDR' => '192.168.1.1'])
+            ->post(route('registro.store'), [])
+            ->assertStatus(429);
     }
 }

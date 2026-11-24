@@ -112,4 +112,39 @@ class DireccionServiceTest extends TestCase
 
         $this->servicio->agregar($this->user, $this->datos(['localidad_id' => 999999]));
     }
+
+    public function test_eliminar_direccion(): void
+    {
+        $dir1 = $this->servicio->agregar($this->user, $this->datos(['calle' => 'Dir 1']));
+        $dir2 = $this->servicio->agregar($this->user, $this->datos(['calle' => 'Dir 2']));
+
+        $this->servicio->eliminar($this->user, $dir2->id);
+
+        $this->assertDatabaseMissing('direcciones', ['id' => $dir2->id]);
+    }
+
+    public function test_eliminar_direccion_principal_promueve_otra(): void
+    {
+        $dir1 = $this->servicio->agregar($this->user, $this->datos(['calle' => 'Dir 1']));
+        $dir2 = $this->servicio->agregar($this->user, $this->datos(['calle' => 'Dir 2']));
+
+        $this->assertTrue($dir1->fresh()->es_principal);
+
+        $this->servicio->eliminar($this->user, $dir1->id);
+
+        $this->assertDatabaseMissing('direcciones', ['id' => $dir1->id]);
+        $this->assertTrue($dir2->fresh()->es_principal);
+        $this->assertSame(1, $this->cantidadDePrincipales());
+    }
+
+    public function test_no_permite_eliminar_direccion_ajena(): void
+    {
+        $otroUsuario = User::factory()->create();
+        $ajena = $this->servicio->agregar($otroUsuario, $this->datos());
+
+        $this->expectException(DireccionInvalidaException::class);
+        $this->expectExceptionMessage('La dirección no pertenece al usuario.');
+
+        $this->servicio->eliminar($this->user, $ajena->id);
+    }
 }

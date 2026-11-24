@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="es">
   <head>
     <!-- figma:head-start -->
@@ -193,7 +193,7 @@
                 <select id="localidad_id" name="localidad_id" required>
                   <option value="" disabled @selected(! old('localidad_id'))>Seleccionar</option>
                   @foreach($localidades ?? [] as $localidad)
-                    <option value="{{ $localidad->id }}" @selected(old('localidad_id') == $localidad->id)>{{ $localidad->descripcion }}</option>
+                    <option value="{{ $localidad->id }}" data-provincia="{{ $localidad->provincia_id }}" @selected(old('localidad_id') == $localidad->id)>{{ $localidad->descripcion }}</option>
                   @endforeach
                 </select>
                 @error('localidad_id') <span class="field-error" style="color:#b00020;font-size:.85rem;">{{ $message }}</span> @enderror
@@ -219,12 +219,13 @@
         <p class="footer__brand">AURA CLOTHES</p>
         <p>© 2026 AURA CLOTHES. Todos los derechos reservados.</p>
         <div class="footer__links">
-          <a href="#">Términos</a>
-          <a href="#">Privacidad</a>
+          <a href="{{ route('paginas.terminos') }}">Términos</a>
+          <a href="{{ route('paginas.privacidad') }}">Privacidad</a>
         </div>
       </div>
     </footer>
 
+    <script src="{{ asset('js/provincias-localidades.js') }}"></script>
     <script type="module" src="{{ asset('js/registro.js') }}"></script>
     <!-- figma:body-end -->
   </body>

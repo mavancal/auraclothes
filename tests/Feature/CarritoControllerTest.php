@@ -77,4 +77,15 @@ class CarritoControllerTest extends TestCase
             ->assertSee('Tu carrito está vacío')
             ->assertDontSee('Finalizar compra');
     }
+
+    public function test_el_header_muestra_el_contador_del_carrito(): void
+    {
+        $producto = Producto::factory()->create();
+
+        $this->withSession(['carrito' => [$producto->id => 3]])
+            ->get(route('inicio'))
+            ->assertOk()
+            ->assertSee('icon-btn__badge', false)
+            ->assertSee('3');
+    }
 }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class DireccionService
 {
         public const MENSAJE_USADA = 'Esta dirección ya se usó en un pedido, así que no se puede modificar. Si cambió, agregá una dirección nueva.';
+    public const MENSAJE_ELIMINAR_USADA = 'Esta dirección ya se usó en un pedido, así que no se puede eliminar.';
     /**
      * Agrega una dirección al contacto del usuario.
      * Si es la primera, o si se pide, queda como principal (y se desmarcan las demás).
@@ -128,6 +129,40 @@ class DireccionService
             ]);
 
             return $direccion;
+        });
+    }
+
+    /**
+     * Elimina una dirección propia del usuario siempre que no haya sido usada en ningún pedido.
+     * Si la dirección era la principal y quedan otras, promueve una a principal.
+     *
+     * @throws DireccionInvalidaException
+     */
+    public function eliminar(User $user, int $direccionId): void
+    {
+        DB::transaction(function () use ($user, $direccionId) {
+            $contacto = Contacto::whereKey($user->contacto_id)->lockForUpdate()->firstOrFail();
+
+            $direccion = $contacto->direcciones()->whereKey($direccionId)->first();
+
+            if (! $direccion) {
+                throw new DireccionInvalidaException('La dirección no pertenece al usuario.');
+            }
+
+            if ($direccion->pedidos()->exists()) {
+                throw new DireccionInvalidaException(self::MENSAJE_ELIMINAR_USADA);
+            }
+
+            $eraPrincipal = $direccion->es_principal;
+
+            $direccion->delete();
+
+            if ($eraPrincipal) {
+                $otraDireccion = $contacto->direcciones()->first();
+                if ($otraDireccion) {
+                    $otraDireccion->update(['es_principal' => true]);
+                }
+            }
         });
     }
 }

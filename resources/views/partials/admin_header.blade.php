@@ -21,5 +21,8 @@
     <li><a class="mainnav__link {{ request()->routeIs('panel_productos_admin*') ? 'is-active' : '' }}" href="{{ route('panel_productos_admin') }}">Productos</a></li>
     <li><a class="mainnav__link {{ request()->routeIs('panel_pedidos_admin*') ? 'is-active' : '' }}" href="{{ route('panel_pedidos_admin') }}">Pedidos</a></li>
     <li><a class="mainnav__link {{ request()->routeIs('panel_mensajes_admin*') ? 'is-active' : '' }}" href="{{ route('panel_mensajes_admin') }}">Mensajes</a></li>
+    @if (auth()->user()?->tieneNivel(100))
+      <li><a class="mainnav__link {{ request()->routeIs('panel_usuarios_admin*') ? 'is-active' : '' }}" href="{{ route('panel_usuarios_admin') }}">Usuarios</a></li>
+    @endif
   </ul>
 </nav>
